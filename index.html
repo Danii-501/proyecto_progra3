@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ignis Aprendizaje - Tu Camino hacia el Éxito Educativo</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body data-theme="light">
+    <div class="bg-overlay"></div>
+    
+    <header>
+        <nav>
+            <div class="logo">🔥 Ignis Aprendizaje</div>
+            <ul class="nav-links">
+                <li><a href="#inicio">Inicio</a></li>
+                <li><a href="tipos.html">Estilos de Aprendizaje</a></li>
+                <li><a href="#recursos">Recursos</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+            <div class="control-buttons">
+                <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">🌙</button>
+                <button class="music-toggle" id="musicToggle" aria-label="Reproducir música">🎵</button>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="inicio" class="hero-section">
+            <div class="hero-content">
+                <h1 class="hero-title">Ignis Aprendizaje</h1>
+                <p class="hero-subtitle">Tu camino hacia el éxito educativo personalizado</p>
+                <div class="cta-buttons">
+                    <a href="#estilos" class="btn btn-primary">Explora los Estilos</a>
+                    <a href="#recursos" class="btn btn-secondary">Ver Recursos</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="estilos" class="carousel-section">
+            <h2 class="section-title">Estilos de Aprendizaje</h2>
+            <div class="carousel-container">
+                <div class="carousel-wrapper" id="carouselWrapper">
+                    <div class="carousel-slide" style="background: linear-gradient(135deg, #667eea1b 0%, #bb77ff 100%);">
+                        <div class="slide-content">
+                            <h3 class="slide-title">Visual</h3>
+                            <p class="slide-description">Aprende mejor a través de imágenes, diagramas y representaciones visuales.</p>
+                            <a href="purpura.html" class="btn btn-primary">Descubrir Más</a>
+                        </div>
+                    </div>
+                    <div class="carousel-slide" style="background: linear-gradient(135deg, #f193fb4f 0%, #f5576cf0 100%);">
+                        <div class="slide-content">
+                            <h3 class="slide-title">Auditivo</h3>
+                            <p class="slide-description">Absorbe información de manera más efectiva escuchando y discutiendo.</p>
+                            <a href="rojo.html" class="btn btn-primary">Descubrir Más</a>
+                        </div>
+                    </div>
+                    <div class="carousel-slide" style="background: linear-gradient(135deg, #4facfe30 0%, #00f1fe71 100%);">
+                        <div class="slide-content">
+                            <h3 class="slide-title">Kinestésico</h3>
+                            <p class="slide-description">Prefiere el aprendizaje práctico y la experiencia directa.</p>
+                            <a href="azul.html" class="btn btn-primary">Descubrir Más</a>
+                        </div>
+                    </div>
+                    <div class="carousel-slide" style="background: linear-gradient(135deg, #43e97a6c 0%, #38f9d657 100%);">
+                        <div class="slide-content">
+                            <h3 class="slide-title">Lectura/Escritura</h3>
+                            <p class="slide-description">Se destaca en el aprendizaje a través de textos y escritura.</p>
+                            <a href="verde.html" class="btn btn-primary">Descubrir Más</a>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-nav carousel-prev" id="prevBtn">❮</button>
+                <button class="carousel-nav carousel-next" id="nextBtn">❯</button>
+            </div>
+            <div class="carousel-dots" id="carouselDots">
+                <span class="dot active" data-index="0"></span>
+                <span class="dot" data-index="1"></span>
+                <span class="dot" data-index="2"></span>
+                <span class="dot" data-index="3"></span>
+            </div>
+        </section>
+
+        <section id="recursos" class="features-section">
+            <h2 class="section-title">Recursos y Herramientas</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">📚</div>
+                    <h3 class="feature-title">Biblioteca Digital</h3>
+                    <p class="feature-description">Accede a miles de recursos educativos organizados por categorías y niveles.</p>
+                    <br>
+                     <a href="bibioteca.html" class="btn btn-primary">Ver</a> 
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3 class="feature-title">Evaluación Personalizada</h3>
+                    <p class="feature-description">Identifica tu estilo de aprendizaje con nuestras evaluaciones especializadas.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💡</div>
+                    <h3 class="feature-title">Estrategias Adaptativas</h3>
+                    <p class="feature-description">Recibe recomendaciones personalizadas basadas en tu perfil de aprendizaje.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📈</div>
+                    <h3 class="feature-title">Seguimiento de Progreso</h3>
+                    <p class="feature-description">Monitorea tu evolución académica con herramientas de análisis avanzadas.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👥</div>
+                    <h3 class="feature-title">Comunidad de Aprendizaje</h3>
+                    <p class="feature-description">Conecta con otros estudiantes y comparte experiencias educativas.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🏆</div>
+                    <h3 class="feature-title">Certificaciones</h3>
+                    <p class="feature-description">Obtén reconocimientos oficiales por tus logros académicos.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer id="contacto">
+        <p>&copy; 2025 Ignis Aprendizaje by Daniel Chango.</p>
+        <p>Página Web - Proyecto Final de Programación</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
