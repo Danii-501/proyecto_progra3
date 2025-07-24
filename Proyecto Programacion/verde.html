@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ignis Aprendizaje - Aprendizaje Lectura/Escritura</title>
+    <style>
+        /* Variables de tema - Tonos de Verde */
+        :root {
+            --primary-color: #0A3D0A; /* Verde muy oscuro, casi negro */
+            --secondary-color: #1A521A; /* Verde oscuro */
+            --accent-color: #28B463; /* Verde brillante */
+            --text-color: #052B05; /* Texto verde oscuro */
+            --bg-color: #EBF7EB; /* Fondo muy claro, casi blanco con tinte verde */
+            --surface-color: #B4DFB4; /* Superficie clara con tinte verde */
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --gradient-1: linear-gradient(135deg, #28B463 0%, #6FCF97 100%); /* Degradado de verde */
+            --gradient-2: linear-gradient(135deg, #1A521A 0%, #0A3D0A 100%); /* Degradado de verde más oscuro */
+            --bg-image: url('verde.jpg'); /* Puedes usar una imagen de patrón verde */
+            --green-800: #0A3D0A; /* Verde oscuro para títulos principales */
+            --green-700: #1A521A; /* Verde medio oscuro */
+            --green-600: #28B463; /* Verde vibrante */
+            --green-200: #8BC48B; /* Verde muy claro */
+            --green-100: #EBF7EB; /* Verde casi blanco */
+            --lime-500: #8BC34A; /* Lima para contraste o énfasis */
+            --lime-400: #AED581; /* Lima más claro */
+            --gray-800: #1F2937; /* Gris oscuro para contraste */
+            --gray-700: #4B5563; /* Gris medio */
+            --gray-600: #6B7280; /* Gris claro */
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #EBF7EB;
+            --secondary-color: #6FCF97; /* Verde claro */
+            --accent-color: #28B463; /* Verde brillante */
+            --text-color: #EBF7EB;
+            --bg-color: #001F00; /* Fondo muy oscuro, casi negro con tinte verde */
+            --surface-color: #0A3D0A; /* Superficie oscura con tinte verde */
+            --shadow-color: rgba(255, 255, 255, 0.1);
+            --gradient-1: linear-gradient(135deg, #6FCF97 0%, #28B463 100%);
+            --gradient-2: linear-gradient(135deg, #1A521A 0%, #0A3D0A 100%);
+            --bg-image: url('verde.jpg'); /* Imagen de patrón verde oscuro */
+            --green-800: #EBF7EB;
+            --green-700: #B4DFB4;
+            --green-600: #6FCF97;
+            --green-200: #1A521A;
+            --green-100: #0A3D0A;
+            --lime-500: #AED581;
+            --lime-400: #C5E1A5;
+            --gray-800: #E5E7EB;
+            --gray-700: #D1D5DB;
+            --gray-600: #9CA3AF;
+        }
+
+        /* Estilos base (Mantenidos y ajustados para el nuevo esquema de color) */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                45deg,
+                rgba(235, 247, 235, 0.9) 0%, /* Ajustado para tonos verdes */
+                rgba(180, 223, 180, 0.85) 35%, /* Ajustado para tonos verdes */
+                rgba(140, 196, 140, 0.8) 100% /* Ajustado para tonos verdes */
+            ), var(--bg-image);
+            background-attachment: fixed;
+            background-size: cover;
+            z-index: -1;
+            transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] .bg-overlay {
+            background: linear-gradient(
+                45deg,
+                rgba(0, 31, 0, 0.95) 0%, /* Ajustado para tonos verdes oscuros */
+                rgba(10, 61, 10, 0.9) 35%, /* Ajustado para tonos verdes oscuros */
+                rgba(26, 82, 26, 0.85) 100% /* Ajustado para tonos verdes oscuros */
+            ), var(--bg-image);
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(10, 61, 10, 0.95); /* Verde oscuro */
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(10, 61, 10, 0.3);
+        }
+
+        [data-theme="dark"] header {
+            background: rgba(0, 20, 0, 0.95); /* Verde más oscuro para el modo oscuro */
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #EBF7EB; /* Verde muy claro */
+            text-decoration: none;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--green-200); /* Verde claro para los enlaces */
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+        }
+
+        .nav-links a:hover {
+            color: var(--lime-400); /* Lima para el hover */
+            background: rgba(180, 223, 180, 0.1); /* Tinte verde claro */
+        }
+
+        .control-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .theme-toggle, .music-toggle {
+            background: var(--surface-color);
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px var(--shadow-color);
+        }
+
+        .theme-toggle:hover, .music-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px var(--shadow-color);
+        }
+
+        .music-toggle.playing {
+            background: var(--accent-color);
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Contenido principal */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        main {
+            margin-top: 80px;
+            padding: 2rem 0;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            background: rgba(255, 255, 255, 0.1); /* Mantener un ligero fondo translúcido */
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            margin: 2rem auto;
+            border: 1px solid rgba(180, 223, 180, 0.2); /* Borde verde claro */
+        }
+
+        [data-theme="dark"] .hero {
+            background: rgba(0, 20, 0, 0.2); /* Verde oscuro para el modo oscuro */
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            color: #F8F9FA; /* Blanco grisáceo */
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(10, 61, 10, 0.5); /* Sombra de texto verde oscuro */
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            color: var(--green-200); /* Verde claro */
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--lime-400), var(--lime-500));
+            color: var(--gray-800);
+            padding: 1rem 2rem;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(174, 213, 129, 0.3); /* Sombra lima */
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(174, 213, 129, 0.4);
+        }
+
+        /* Content Sections */
+        .section {
+            background: rgba(235, 247, 235, 0.95); /* Fondo claro con tinte verde */
+            margin: 3rem auto;
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(10, 61, 10, 0.2); /* Sombra verde oscuro */
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(180, 223, 180, 0.3); /* Borde verde claro */
+        }
+
+        [data-theme="dark"] .section {
+            background: rgba(0, 20, 0, 0.9); /* Fondo oscuro con tinte verde */
+            box-shadow: 0 10px 30px rgba(10, 61, 10, 0.1);
+        }
+
+        .section h2 {
+            color: var(--green-800); /* Verde oscuro para títulos */
+            font-size: clamp(2rem, 4vw, 2.5rem);
+            margin-bottom: 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .section h2::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(135deg, var(--green-600), var(--green-700)); /* Degradado verde */
+            margin: 1rem auto;
+            border-radius: 2px;
+        }
+
+        .section h3 {
+            color: var(--green-700); /* Verde medio oscuro para subtítulos */
+            font-size: clamp(1.5rem, 3vw, 1.8rem);
+            margin: 2rem 0 1rem 0;
+        }
+
+        .section p {
+            color: var(--gray-700);
+            font-size: clamp(1rem, 2vw, 1.1rem);
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(40, 180, 99, 0.1), rgba(26, 82, 26, 0.05)); /* Degradado verde suave */
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(40, 180, 99, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] .feature-card {
+            background: linear-gradient(135deg, rgba(40, 180, 99, 0.15), rgba(26, 82, 26, 0.1));
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(40, 180, 99, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .feature-card h4 {
+            color: var(--green-800);
+            font-size: clamp(1.2rem, 2vw, 1.4rem);
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--gray-600);
+            text-align: center;
+        }
+
+        /* Resources List */
+        .resources-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .resource-item {
+            background: linear-gradient(135deg, rgba(180, 223, 180, 0.2), rgba(235, 247, 235, 0.1)); /* Degradado verde muy claro */
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--green-600);
+            transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] .resource-item {
+            background: linear-gradient(135deg, rgba(180, 223, 180, 0.15), rgba(235, 247, 235, 0.05));
+        }
+
+        .resource-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 8px 25px rgba(40, 180, 99, 0.15);
+        }
+
+        .resource-item h4 {
+            color: var(--green-800);
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .resource-item p {
+            color: var(--gray-700);
+        }
+
+        /* Contact Form */
+        .contact-form {
+            background: linear-gradient(135deg, rgba(26, 82, 26, 0.1), rgba(40, 180, 99, 0.05)); /* Degradado verde suave */
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+        }
+
+        [data-theme="dark"] .contact-form {
+            background: linear-gradient(135deg, rgba(26, 82, 26, 0.15), rgba(40, 180, 99, 0.1));
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--green-800);
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid rgba(40, 180, 99, 0.3);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--green-600);
+            box-shadow: 0 0 0 3px rgba(40, 180, 99, 0.1);
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--green-600), var(--green-700));
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(40, 180, 99, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(10, 61, 10, 0.95); /* Verde oscuro */
+            color: var(--green-200);
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        [data-theme="dark"] footer {
+            background: rgba(0, 20, 0, 0.95); /* Verde más oscuro para el modo oscuro */
+        }
+
+        .container p {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--green-200); /* Verde claro */
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-links {
+                position: fixed;
+                left: -100%;
+                top: 80px;
+                flex-direction: column;
+                background: rgba(10, 61, 10, 0.98); /* Verde oscuro */
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                padding: 2rem 0;
+                gap: 1.5rem;
+            }
+
+            [data-theme="dark"] .nav-links {
+                background: rgba(0, 20, 0, 0.98); /* Verde más oscuro para el modo oscuro */
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .hero {
+                padding: 3rem 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .section {
+                padding: 2rem 1rem;
+                margin: 1.5rem auto;
+            }
+
+            .section h2 {
+                font-size: 1.8rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .hero {
+                padding: 2rem 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .section {
+                padding: 1.5rem 1rem;
+            }
+        }
+
+        /* Scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(180, 223, 180, 0.1); /* Verde claro */
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--green-600), var(--green-700));
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-overlay"></div>
+    
+    <header>
+        <nav>
+            <a href="index.html" class="logo">💡 Ignis Aprendizaje</a>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="tipos.html">Estilos de Aprendizaje</a></li>
+                <li><a href="index.html #recursos">Recursos</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+            <div class="control-buttons">
+                <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">🌙</button>
+                <button class="music-toggle" id="musicToggle" aria-label="Reproducir música">🎵</button>
+                <div class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="inicio" class="hero container">
+            <h1>Potencia tu Mente con el Aprendizaje Lectura/Escritura</h1>
+            <p>Si aprendes mejor a través de palabras escritas, notas detalladas y lectura profunda, este es tu espacio. Descubre cómo optimizar tu estilo.</p>
+            <a href="#estilos" class="cta-button">Explorar Métodos</a>
+        </section>
+
+        <section class="section container">
+            <h2>¿Qué es el Aprendizaje Lectura/Escritura?</h2>
+            <p>El aprendizaje **Lectura/Escritura** es un estilo en el que las personas **procesan la información de manera más efectiva a través de la lectura y la escritura**. Estos aprendices se sienten cómodos con la información presentada en formato textual, ya sea en libros, artículos, documentos o pantallas.</p>
+            
+            <p>Se caracterizan por su capacidad para **tomar notas detalladas, resumir, parafrasear y organizar ideas por escrito**. Disfrutan de la investigación, la elaboración de informes y el uso de listas. Para ellos, la interacción con el texto es fundamental para la comprensión y retención del conocimiento.</p>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">📚</span>
+                    <h4>Comprensión Textual Profunda</h4>
+                    <p>La **lectura activa y la elaboración de resúmenes** son fundamentales para asimilar y organizar la información.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">✍️</span>
+                    <h4>Retención a Través de la Escritura</h4>
+                    <p>El acto de **escribir, reescribir y parafrasear** solidifica los conceptos en la memoria a largo plazo.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">📝</span>
+                    <h4>Organización de Ideas</h4>
+                    <p>La creación de **listas, esquemas y mapas conceptuales** basados en texto facilita la estructuración del conocimiento.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="estilos" class="section container">
+            <h2>Estrategias para el Aprendizaje Lectura/Escritura</h2>
+            
+            <h3>📖 Lectura Activa y Subrayado</h3>
+            <p>Sumérgete en los textos. **Lee detenidamente, subraya las ideas clave, haz anotaciones en los márgenes** y reescribe fragmentos con tus propias palabras para asegurar la comprensión.</p>
+
+            <h3>✍️ Tomar Notas Detalladas y Elaboradas</h3>
+            <p>No solo copies; **toma notas exhaustivas, organiza la información en esquemas, utiliza viñetas y numeración**. Considera reescribir tus notas después de clase o de una lectura para reforzarlas.</p>
+
+            <h3>📊 Crear Resúmenes y Ensayos</h3>
+            <p>Transforma la información en **resúmenes concisos, informes o ensayos**. Este proceso de condensación y organización te ayuda a internalizar la materia y a identificar los puntos más importantes.</p>
+
+            <h3>📑 Usar Listas y Flashcards</h3>
+            <p>Para memorizar, crea **listas de vocabulario, fechas o fórmulas**. Las **flashcards** con preguntas en un lado y respuestas escritas en el otro son excelentes para repasar y autoevaluarte.</p>
+
+            <h3>💻 Interactuar con Contenido Digital</h3>
+            <p>Aprovecha los **e-books, artículos online y documentos PDF**. Utiliza herramientas de resaltado digital, anota comentarios y busca diccionarios o enciclopedias online para ampliar tu conocimiento.</p>
+        </section>
+
+        <section id="recursos" class="section container">
+            <h2>Recursos para el Aprendizaje Lectura/Escritura</h2>
+            
+            <div class="resources-list">
+                <div class="resource-item">
+                    <h4>📚 Libros de Texto y Artículos Académicos</h4>
+                    <p>Material fundamental para la lectura profunda y el estudio de conceptos detallados.</p>
+                </div>
+                <div class="resource-item">
+                    <h4>📝 Aplicaciones de Toma de Notas y Edición</h4>
+                    <p>Evernote, OneNote, Google Docs; para organizar, escribir y sincronizar tus apuntes.</p>
+                </div>
+                <div class="resource-item">
+                    <h4>🌐 Bases de Datos y Bibliotecas Digitales</h4>
+                    <p>JSTOR, PubMed, Google Scholar; para investigación y acceso a vasta información textual.</p>
+                </div>
+                <div class="resource-item">
+                    <h4>✍️ Programas de Procesamiento de Texto</h4>
+                    <p>Microsoft Word, LibreOffice Writer; para elaborar documentos, ensayos y resúmenes.</p>
+                </div>
+                <div class="resource-item">
+                    <h4>✍️ Cuadernos, Bolígrafos y Resaltadores</h4>
+                    <p>Materiales tradicionales para la escritura manual, el subrayado y la organización de ideas.</p>
+                </div>
+                <div class="resource-item">
+                    <h4>🧠 Plataformas de Flashcards Digitales</h4>
+                    <p>Anki, Quizlet; para crear y repasar tarjetas de estudio de manera interactiva.</p>
+                </div>
+            </div>
+
+            <h3>Consejos para Maximizar tu Aprendizaje Lectura/Escritura</h3>
+            <p><strong>Crea tu propio material:</strong> No solo leas lo que te dan. Genera tus propios resúmenes, esquemas, glosarios y preguntas basadas en el material de estudio. El acto de crear el texto es clave.</p>
+            
+            <p><strong>Escribe para entender:</strong> Si un concepto es complicado, intenta explicarlo por escrito a un nivel que un niño de 5 años pueda entender. Esto te obliga a simplificar y organizar tus pensamientos.</p>
+            
+            <p><strong>Lee en voz alta (ocasionalmente):</strong> Aunque tu estilo es lectura/escritura, leer en voz alta ciertos pasajes difíciles puede ayudarte a "escucharte" la información, reforzando la retención.</p>
+        </section>
+
+        <section id="contacto" class="section container">
+            <h2>Contacto</h2>
+            <p>¿Tienes preguntas sobre el aprendizaje Lectura/Escritura o necesitas asesoría personalizada? ¡Nos encantaría ayudarte en tu proceso de aprendizaje!</p>
+            
+            <div class="contact-form">
+                <form id="contact-form">
+                    <div class="form-group">
+                        <label for="name">Nombre completo:</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Correo electrónico:</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Asunto:</label>
+                        <input type="text" id="subject" name="subject" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Mensaje:</label>
+                        <textarea id="message" name="message" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Enviar Mensaje</button>
+                </form>
+            </div>
+
+            <p><strong>📧 Email:</strong> info@ignisaprendizaje.com</p>
+            <p><strong>📱 Teléfono:</strong> +593 98 503 0708</p>
+            <p><strong>🏢 Dirección:</strong> Facultad de Fiososfía, Letras y Ciencias de la Educación</p>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Ignis Aprendizaje by Daniel Chango. Todos los derechos reservados. | Potenciando tu aprendizaje a través de la lectura y la escritura.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Variables globales
+        const themeToggle = document.getElementById('themeToggle');
+        const musicToggle = document.getElementById('musicToggle');
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('nav-links');
+        let audioContext = null;
+        let oscillator = null;
+
+        // Cambio de tema
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            document.body.setAttribute('data-theme', newTheme);
+            themeToggle.textContent = newTheme === 'light' ? '🌙' : '☀️';
+            
+            // Guardar preferencia en localStorage
+            localStorage.setItem('theme', newTheme);
+        });
+
+        // Control de música
+        musicToggle.addEventListener('click', () => {
+            if (!oscillator) {
+                playBackgroundMusic();
+            } else {
+                stopBackgroundMusic();
+            }
+        });
+
+        // Función para reproducir música de fondo (tono suave)
+        function playBackgroundMusic() {
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                // Configuración de tono suave
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(523.25, audioContext.currentTime); // Do (C5)
+                gainNode.gain.setValueAtTime(0.03, audioContext.currentTime); // Volumen más bajo
+                
+                oscillator.start();
+                musicToggle.classList.add('playing');
+                musicToggle.textContent = '🔊';
+            } catch (e) {
+                console.error('Error al reproducir música:', e);
+                musicToggle.textContent = '🔇';
+            }
+        }
+
+        // Función para detener la música
+        function stopBackgroundMusic() {
+            if (oscillator) {
+                oscillator.stop();
+                oscillator = null;
+            }
+            if (audioContext) {
+                audioContext.close();
+                audioContext = null;
+            }
+            musicToggle.classList.remove('playing');
+            musicToggle.textContent = '🎵';
+        }
+
+        // Inicialización al cargar la página
+        document.addEventListener('DOMContentLoaded', () => {
+            // Cargar tema guardado
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.body.setAttribute('data-theme', savedTheme);
+            themeToggle.textContent = savedTheme === 'light' ? '🌙' : '☀️';
+            
+            // Menú móvil
+            hamburger.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+            });
+            
+            // Cerrar menú al hacer clic en enlaces
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                });
+            });
+
+            // Form submission
+            document.getElementById('contact-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Get form data
+                const formData = new FormData(this);
+                const name = formData.get('name');
+                const email = formData.get('email');
+                const subject = formData.get('subject');
+                const message = formData.get('message');
+                
+                // Simple validation
+                if (name && email && subject && message) {
+                    alert('¡Gracias por tu mensaje! Te responderemos pronto.');
+                    this.reset();
+                } else {
+                    alert('Por favor, completa todos los campos.');
+                }
+            });
+
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Add scroll effect to header
+            window.addEventListener('scroll', () => {
+                const header = document.querySelector('header');
+                if (window.scrollY > 100) {
+                    header.style.background = 'rgba(10, 61, 10, 0.98)'; /* Verde oscuro */
+                } else {
+                    header.style.background = 'rgba(10, 61, 10, 0.95)'; /* Verde oscuro */
+                }
+            });
+        });
+    </script>
+</body>
+</html>

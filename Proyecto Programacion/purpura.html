@@ -1,0 +1,890 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ignis Aprendizaje - Aprendizaje Visual</title>
+    <style>
+        /* Variables de tema */
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #d4af37; /* Dorado */
+            --accent-color: #c0a050;   /* Dorado más oscuro */
+            --text-color: #2c3e50;
+            --bg-color: #ffffff;
+            --surface-color: #f8f9fa;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+            --gradient-1: linear-gradient(135deg, #d4af37 0%, #f5d327 100%); /* Dorado */
+            --gradient-2: linear-gradient(135deg, #c0a050 0%, #d4af37 100%); /* Dorado oscuro */
+            --bg-image: url('purpura.jpg'); /* Patrón dorado */
+            --purple-800: #581c87;
+            --purple-700: #7c3aed;
+            --purple-600: #a855f7;
+            --purple-200: #e9d5ff;
+            --purple-100: #f3e8ff;
+            --amber-500: #f59e0b;
+            --amber-400: #fbbf24;
+            --gray-800: #1f2937;
+            --gray-700: #4b5563;
+            --gray-600: #6b7280;
+        }
+
+        [data-theme="dark"] {
+            --primary-color: #ffffff;
+            --secondary-color: #c0c0c0; /* Plateado */
+            --accent-color: #a0a0a0;   /* Plateado más oscuro */
+            --text-color: #ffffff;
+            --bg-color: #121212;
+            --surface-color: #1e1e1e;
+            --shadow-color: rgba(255, 255, 255, 0.1);
+            --gradient-1: linear-gradient(135deg, #c0c0c0 0%, #e0e0e0 100%); /* Plateado */
+            --gradient-2: linear-gradient(135deg, #a0a0a0 0%, #c0c0c0 100%); /* Plateado oscuro */
+            --bg-image: url('purpura.jpg'); /* Patrón plateado */
+            --purple-800: #d8b4fe;
+            --purple-700: #c084fc;
+            --purple-600: #a855f7;
+            --purple-200: #4a044e;
+            --purple-100: #2d0330;
+            --amber-500: #fcd34d;
+            --amber-400: #fde68a;
+            --gray-800: #e5e7eb;
+            --gray-700: #d1d5db;
+            --gray-600: #9ca3af;
+        }
+
+        /* Estilos base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            overflow-x: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .bg-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                45deg,
+                rgba(255, 255, 255, 0.9) 0%,
+                rgba(255, 255, 255, 0.85) 35%,
+                rgba(255, 255, 255, 0.8) 100%
+            ), var(--bg-image);
+            background-attachment: fixed;
+            background-size: cover;
+            z-index: -1;
+            transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] .bg-overlay {
+            background: linear-gradient(
+                45deg,
+                rgba(18, 18, 18, 0.95) 0%,
+                rgba(30, 30, 30, 0.9) 35%,
+                rgba(50, 50, 50, 0.85) 100%
+            ), var(--bg-image);
+        }
+
+        /* Header */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(88, 28, 135, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 2rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 20px rgba(88, 28, 135, 0.3);
+        }
+
+        [data-theme="dark"] header {
+            background: rgba(44, 9, 76, 0.95);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: #f3e8ff;
+            text-decoration: none;
+            background: var(--gradient-1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--purple-200);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+        }
+
+        .nav-links a:hover {
+            color: var(--amber-400);
+            background: rgba(196, 181, 253, 0.1);
+        }
+
+        .control-buttons {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .theme-toggle, .music-toggle {
+            background: var(--surface-color);
+            border: none;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            color: var(--text-color);
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 10px var(--shadow-color);
+        }
+
+        .theme-toggle:hover, .music-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px var(--shadow-color);
+        }
+
+        .music-toggle.playing {
+            background: var(--accent-color);
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        /* Contenido principal */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        main {
+            margin-top: 80px;
+            padding: 2rem 0;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            padding: 4rem 0;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border-radius: 20px;
+            margin: 2rem auto;
+            border: 1px solid rgba(196, 181, 253, 0.2);
+        }
+
+        [data-theme="dark"] .hero {
+            background: rgba(30, 30, 30, 0.2);
+        }
+
+        .hero h1 {
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            color: #f8fafc;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(88, 28, 135, 0.5);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        .hero p {
+            font-size: clamp(1rem, 2vw, 1.3rem);
+            color: #e9d5ff;
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--amber-400), var(--amber-500));
+            color: var(--gray-800);
+            padding: 1rem 2rem;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(251, 191, 36, 0.3);
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(251, 191, 36, 0.4);
+        }
+
+        /* Content Sections */
+        .section {
+            background: rgba(255, 255, 255, 0.95);
+            margin: 3rem auto;
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(88, 28, 135, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(196, 181, 253, 0.3);
+        }
+
+        [data-theme="dark"] .section {
+            background: rgba(30, 30, 30, 0.9);
+            box-shadow: 0 10px 30px rgba(88, 28, 135, 0.1);
+        }
+
+        .section h2 {
+            color: var(--purple-800);
+            font-size: clamp(2rem, 4vw, 2.5rem);
+            margin-bottom: 1.5rem;
+            text-align: center;
+            position: relative;
+        }
+
+        .section h2::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(135deg, var(--purple-600), var(--purple-700));
+            margin: 1rem auto;
+            border-radius: 2px;
+        }
+
+        .section h3 {
+            color: var(--purple-700);
+            font-size: clamp(1.5rem, 3vw, 1.8rem);
+            margin: 2rem 0 1rem 0;
+        }
+
+        .section p {
+            color: var(--gray-700);
+            font-size: clamp(1rem, 2vw, 1.1rem);
+            margin-bottom: 1.5rem;
+            text-align: justify;
+        }
+
+        /* Features Grid */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .feature-card {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.1), rgba(124, 58, 237, 0.05));
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            border: 1px solid rgba(168, 85, 247, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] .feature-card {
+            background: linear-gradient(135deg, rgba(168, 85, 247, 0.15), rgba(124, 58, 237, 0.1));
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(168, 85, 247, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .feature-card h4 {
+            color: var(--purple-800);
+            font-size: clamp(1.2rem, 2vw, 1.4rem);
+            margin-bottom: 1rem;
+        }
+
+        .feature-card p {
+            color: var(--gray-600);
+            text-align: center;
+        }
+
+        /* Resources List */
+        .resources-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+
+        .resource-item {
+            background: linear-gradient(135deg, rgba(196, 181, 253, 0.2), rgba(221, 214, 254, 0.1));
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--purple-600);
+            transition: all 0.3s ease;
+        }
+
+        [data-theme="dark"] .resource-item {
+            background: linear-gradient(135deg, rgba(196, 181, 253, 0.15), rgba(221, 214, 254, 0.05));
+        }
+
+        .resource-item:hover {
+            transform: translateX(10px);
+            box-shadow: 0 8px 25px rgba(168, 85, 247, 0.15);
+        }
+
+        .resource-item h4 {
+            color: var(--purple-800);
+            margin-bottom: 0.5rem;
+            font-size: 1.2rem;
+        }
+
+        .resource-item p {
+            color: var(--gray-700);
+        }
+
+        /* Contact Form */
+        .contact-form {
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(168, 85, 247, 0.05));
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+        }
+
+        [data-theme="dark"] .contact-form {
+            background: linear-gradient(135deg, rgba(124, 58, 237, 0.15), rgba(168, 85, 247, 0.1));
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            color: var(--purple-800);
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            border: 2px solid rgba(168, 85, 247, 0.3);
+            border-radius: 8px;
+            font-size: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text-color);
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--purple-600);
+            box-shadow: 0 0 0 3px rgba(168, 85, 247, 0.1);
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, var(--purple-600), var(--purple-700));
+            color: white;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(168, 85, 247, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            background: rgba(88, 28, 135, 0.95);
+            color: var(--purple-200);
+            text-align: center;
+            padding: 2rem 0;
+            margin-top: 3rem;
+        }
+
+        [data-theme="dark"] footer {
+            background: rgba(44, 9, 76, 0.95);
+        }
+
+        .container p {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Mobile Menu */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            padding: 5px;
+        }
+
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: #e9d5ff;
+            margin: 3px 0;
+            transition: 0.3s;
+            border-radius: 2px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hamburger {
+                display: flex;
+            }
+
+            .nav-links {
+                position: fixed;
+                left: -100%;
+                top: 80px;
+                flex-direction: column;
+                background: rgba(88, 28, 135, 0.98);
+                width: 100%;
+                text-align: center;
+                transition: 0.3s;
+                padding: 2rem 0;
+                gap: 1.5rem;
+            }
+
+            [data-theme="dark"] .nav-links {
+                background: rgba(44, 9, 76, 0.98);
+            }
+
+            .nav-links.active {
+                left: 0;
+            }
+
+            .hero {
+                padding: 3rem 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2.2rem;
+            }
+
+            .hero p {
+                font-size: 1.1rem;
+            }
+
+            .section {
+                padding: 2rem 1rem;
+                margin: 1.5rem auto;
+            }
+
+            .section h2 {
+                font-size: 1.8rem;
+            }
+
+            .features-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 15px;
+            }
+
+            .hero {
+                padding: 2rem 1rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .section {
+                padding: 1.5rem 1rem;
+            }
+        }
+
+        /* Scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(196, 181, 253, 0.1);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--purple-600), var(--purple-700));
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-overlay"></div>
+    
+    <header>
+        <nav>
+            <a href="index.html" class="logo">🔥 Ignis Aprendizaje</a>
+            <ul class="nav-links" id="nav-links">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="tipos.html">Estilos de Aprendizaje</a></li>
+                <li><a href="index.html #recursos">Recursos</a></li>
+                <li><a href="#contacto">Contacto</a></li>
+            </ul>
+            <div class="control-buttons">
+                <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">🌙</button>
+                <button class="music-toggle" id="musicToggle" aria-label="Reproducir música">🎵</button>
+                <div class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="inicio" class="hero container">
+            <h1>Descubre el Poder del Aprendizaje Visual</h1>
+            <p>Transforma tu manera de aprender y enseñar con técnicas visuales efectivas que potencian la comprensión y retención del conocimiento.</p>
+            <a href="#estilos" class="cta-button">Explorar Métodos</a>
+        </section>
+
+        <section class="section container">
+            <h2>¿Qué es el Aprendizaje Visual?</h2>
+            <p>El aprendizaje visual es una metodología educativa que aprovecha el poder de las imágenes, diagramas, mapas conceptuales y otros elementos gráficos para facilitar la comprensión y memorización de información. Este enfoque se basa en la premisa de que muchas personas procesan y retienen mejor la información cuando se presenta de forma visual.</p>
+            
+            <p>Los estudios neurocientíficos han demostrado que el cerebro humano procesa las imágenes aproximadamente 60,000 veces más rápido que el texto, lo que convierte al aprendizaje visual en una herramienta extraordinariamente poderosa para la educación moderna.</p>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">🧠</span>
+                    <h4>Mejora la Retención</h4>
+                    <p>Las imágenes y diagramas ayudan a crear conexiones más fuertes en la memoria a largo plazo.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">⚡</span>
+                    <h4>Procesamiento Rápido</h4>
+                    <p>El cerebro procesa información visual hasta 60,000 veces más rápido que el texto.</p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">🎯</span>
+                    <h4>Mayor Comprensión</h4>
+                    <p>Los conceptos complejos se vuelven más claros cuando se representan visualmente.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="estilos" class="section container">
+            <h2>Estilos de Aprendizaje Visual</h2>
+            
+            <h3>🗺️ Mapas Mentales</h3>
+            <p>Los mapas mentales son diagramas que representan información de manera jerárquica y radial, partiendo de un concepto central hacia ideas relacionadas. Esta técnica, popularizada por Tony Buzan, permite organizar y visualizar información compleja de manera intuitiva, facilitando tanto el proceso de aprendizaje como el de memorización.</p>
+
+            <h3>📊 Infografías</h3>
+            <p>Las infografías combinan texto, imágenes y elementos gráficos para presentar información de manera atractiva y fácil de entender. Son especialmente útiles para explicar procesos, estadísticas o conceptos que requieren múltiples tipos de datos para ser comprendidos completamente.</p>
+
+            <h3>🔄 Diagramas de Flujo</h3>
+            <p>Estos diagramas utilizan símbolos gráficos conectados para representar la secuencia de pasos en un proceso. Son fundamentales para entender algoritmos, procedimientos y sistemas complejos, proporcionando una vista clara de cómo fluye la información o las acciones.</p>
+
+            <h3>🎨 Organizadores Gráficos</h3>
+            <p>Los organizadores gráficos incluyen una variedad de herramientas como líneas de tiempo, diagramas de Venn, tablas comparativas y redes conceptuales. Cada uno está diseñado para diferentes tipos de información y relaciones entre conceptos.</p>
+
+            <h3>📈 Visualización de Datos</h3>
+            <p>Gráficos, tablas y representaciones estadísticas que transforman números y datos abstractos en información visual comprensible. Esta técnica es especialmente valiosa en campos como la ciencia, economía y análisis de tendencias.</p>
+        </section>
+
+        <section id="recursos" class="section container">
+            <h2>Recursos para el Aprendizaje Visual</h2>
+            
+            <div class="resources-list">
+                <div class="resource-item">
+                    <h4>🛠️ Herramientas Digitales</h4>
+                    <p>Canva, Lucidchart, MindMeister, Piktochart para crear contenido visual profesional.</p>
+                </div>
+                <div class="resource-item">
+                    <h4>📚 Metodologías</h4>
+                    <p>Técnicas probadas como el método Cornell, mapas conceptuales y diagramas causa-efecto.</p>
+                </div>
+                <div class="resource-item">
+                    <h4>🎓 Aplicaciones Educativas</h4>
+                    <p>Khan Academy, Coursera Visual, EdX con contenido interactivo y multimedia.</p>
+                </div>
+                <div class="resource-item">
+                    <h4>📖 Libros Especializados</h4>
+                    <p>"Visual Learning" de Dave Meier, "The Mind Map Book" de Tony Buzan.</p>
+                </div>
+                <div class="resource-item">
+                    <h4>🌐 Comunidades Online</h4>
+                    <p>Foros y grupos dedicados al intercambio de técnicas de aprendizaje visual.</p>
+                </div>
+                <div class="resource-item">
+                    <h4>🎯 Ejercicios Prácticos</h4>
+                    <p>Plantillas y actividades para implementar inmediatamente en tu proceso de aprendizaje.</p>
+                </div>
+            </div>
+
+            <h3>Consejos para Implementar el Aprendizaje Visual</h3>
+            <p><strong>Identifica tu estilo:</strong> No todos los métodos visuales funcionan igual para cada persona. Experimenta con diferentes técnicas para encontrar las que mejor se adapten a tu forma de procesar información.</p>
+            
+            <p><strong>Combina técnicas:</strong> La efectividad se maximiza cuando se combinan múltiples métodos visuales. Por ejemplo, usar mapas mentales junto con infografías puede proporcionar una comprensión más completa.</p>
+            
+            <p><strong>Practica regularmente:</strong> Como cualquier habilidad, el aprendizaje visual mejora con la práctica constante. Dedica tiempo a crear y revisar tus materiales visuales.</p>
+        </section>
+
+        <section id="contacto" class="section container">
+            <h2>Contacto</h2>
+            <p>¿Tienes preguntas sobre el aprendizaje visual o necesitas asesoría personalizada? ¡Nos encantaría ayudarte en tu proceso de aprendizaje!</p>
+            
+            <div class="contact-form">
+                <form id="contact-form">
+                    <div class="form-group">
+                        <label for="name">Nombre completo:</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Correo electrónico:</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Asunto:</label>
+                        <input type="text" id="subject" name="subject" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Mensaje:</label>
+                        <textarea id="message" name="message" rows="5" required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Enviar Mensaje</button>
+                </form>
+            </div>
+
+            <p><strong>📧 Email:</strong> info@ignisaprendizaje.com</p>
+            <p><strong>📱 Teléfono:</strong> +593 98 503 0708</p>
+            <p><strong>🏢 Dirección:</strong> Facultad de Fiososfía, Letras y Ciencias de la Educación</p>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Ignis Aprendizaje by Daniel Chango. Todos los derechos reservados. | Transformando la educación a través de la visualización.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Variables globales
+        const themeToggle = document.getElementById('themeToggle');
+        const musicToggle = document.getElementById('musicToggle');
+        const hamburger = document.getElementById('hamburger');
+        const navLinks = document.getElementById('nav-links');
+        let audioContext = null;
+        let oscillator = null;
+
+        // Cambio de tema
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            document.body.setAttribute('data-theme', newTheme);
+            themeToggle.textContent = newTheme === 'light' ? '🌙' : '☀️';
+            
+            // Guardar preferencia en localStorage
+            localStorage.setItem('theme', newTheme);
+        });
+
+        // Control de música
+        musicToggle.addEventListener('click', () => {
+            if (!oscillator) {
+                playBackgroundMusic();
+            } else {
+                stopBackgroundMusic();
+            }
+        });
+
+        // Función para reproducir música de fondo
+        function playBackgroundMusic() {
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                
+                // Configuración de tono suave
+                oscillator.type = 'sine';
+                oscillator.frequency.setValueAtTime(330, audioContext.currentTime); // Mi4
+                gainNode.gain.setValueAtTime(0.05, audioContext.currentTime);
+                
+                oscillator.start();
+                musicToggle.classList.add('playing');
+                musicToggle.textContent = '🔊';
+            } catch (e) {
+                console.error('Error al reproducir música:', e);
+                musicToggle.textContent = '🔇';
+            }
+        }
+
+        // Función para detener la música
+        function stopBackgroundMusic() {
+            if (oscillator) {
+                oscillator.stop();
+                oscillator = null;
+            }
+            if (audioContext) {
+                audioContext.close();
+                audioContext = null;
+            }
+            musicToggle.classList.remove('playing');
+            musicToggle.textContent = '🎵';
+        }
+
+        // Inicialización al cargar la página
+        document.addEventListener('DOMContentLoaded', () => {
+            // Cargar tema guardado
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.body.setAttribute('data-theme', savedTheme);
+            themeToggle.textContent = savedTheme === 'light' ? '🌙' : '☀️';
+            
+            // Menú móvil
+            hamburger.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+            });
+            
+            // Cerrar menú al hacer clic en enlaces
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                });
+            });
+
+            // Form submission
+            document.getElementById('contact-form').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Get form data
+                const formData = new FormData(this);
+                const name = formData.get('name');
+                const email = formData.get('email');
+                const subject = formData.get('subject');
+                const message = formData.get('message');
+                
+                // Simple validation
+                if (name && email && subject && message) {
+                    alert('¡Gracias por tu mensaje! Te responderemos pronto.');
+                    this.reset();
+                } else {
+                    alert('Por favor, completa todos los campos.');
+                }
+            });
+
+            // Smooth scrolling for navigation links
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const target = document.querySelector(this.getAttribute('href'));
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                });
+            });
+
+            // Add scroll effect to header
+            window.addEventListener('scroll', () => {
+                const header = document.querySelector('header');
+                if (window.scrollY > 100) {
+                    header.style.background = 'rgba(88, 28, 135, 0.98)';
+                    if (document.body.getAttribute('data-theme') === 'dark') {
+                        header.style.background = 'rgba(44, 9, 76, 0.98)';
+                    }
+                } else {
+                    header.style.background = 'rgba(88, 28, 135, 0.95)';
+                    if (document.body.getAttribute('data-theme') === 'dark') {
+                        header.style.background = 'rgba(44, 9, 76, 0.95)';
+                    }
+                }
+            });
+
+            // Animate elements on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animation = 'fadeInUp 0.8s ease-out forwards';
+                    }
+                });
+            }, observerOptions);
+
+            // Observe all sections
+            document.querySelectorAll('.section').forEach(section => {
+                observer.observe(section);
+            });
+        });
+    </script>
+</body>
+</html>

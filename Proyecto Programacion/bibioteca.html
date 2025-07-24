@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca Virtual - Ignis Aprendizaje</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        .biblioteca-hero {
+            background: linear-gradient(135deg, #747fad 0%, #1d1328 100%);
+            color: white;
+            padding: 80px 20px;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .biblioteca-hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .biblioteca-hero p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .biblioteca-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .categoria-section {
+            margin-bottom: 60px;
+        }
+
+        .categoria-title {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            text-align: center;
+            position: relative;
+        }
+
+        .categoria-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            margin: 15px auto;
+            border-radius: 2px;
+        }
+
+        .libros-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .libro-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            transition: all 0.3s ease;
+            border: 1px solid var(--border-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .libro-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+        .libro-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .libro-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .libro-portada {
+            width: 80px;
+            height: 100px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .libro-titulo {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+
+        .libro-autor {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-bottom: 15px;
+            font-style: italic;
+        }
+
+        .libro-descripcion {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .libro-acciones {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .btn-libro {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-leer {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-leer:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn-descargar {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-descargar:hover {
+            background: var(--secondary-hover);
+            transform: translateY(-2px);
+        }
+
+        .btn-favorito {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+        }
+
+        .btn-favorito:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .filtros-container {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .filtro-btn {
+            background: transparent;
+            border: 2px solid var(--primary-color);
+            color: var(--primary-color);
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.95rem;
+        }
+
+        .filtro-btn:hover,
+        .filtro-btn.active {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        .search-container {
+            max-width: 500px;
+            margin: 30px auto;
+            position: relative;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            border: 2px solid var(--border-color);
+            border-radius: 25px;
+            font-size: 1rem;
+            background: var(--card-bg);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 1.2rem;
+        }
+
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: block;
+        }
+
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .biblioteca-hero h1 {
+                font-size: 2rem;
+            }
+
+            .libros-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .categoria-title {
+                font-size: 2rem;
+            }
+        }
+
+        /* Colores específicos para diferentes categorías */
+        .categoria-metodologia .libro-portada {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .categoria-autoayuda .libro-portada {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+        }
+
+        .categoria-tecnicas .libro-portada {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+        }
+
+        .categoria-motivacion .libro-portada {
+            background: linear-gradient(135deg, #43e97b, #38f9d7);
+        }
+
+        .categoria-neurociencia .libro-portada {
+            background: linear-gradient(135deg, #fa709a, #fee140);
+        }
+    </style>
+</head>
+<body data-theme="light">
+    <div class="bg-overlay"></div>
+    
+    <header>
+        <nav>
+            <div class="logo">🔥 Ignis Aprendizaje</div>
+            <ul class="nav-links">
+                <li><a href="index.html">Inicio</a></li>
+                <li><a href="tipos.html">Estilos de Aprendizaje</a></li>
+                <li><a href="#biblioteca">Biblioteca</a></li>
+                <li><a href="index.html#contacto">Contacto</a></li>
+            </ul>
+            <div class="control-buttons">
+                <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">🌙</button>
+                <button class="music-toggle" id="musicToggle" aria-label="Reproducir música">🎵</button>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">☰</button>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="biblioteca-hero">
+            <h1>📚 Biblioteca Virtual</h1>
+            <p>Descubre una colección curada de libros sobre metodologías de aprendizaje, técnicas de estudio y desarrollo personal para potenciar tu crecimiento educativo</p>
+        </section>
+
+        <div class="biblioteca-container">
+            <div class="stats-container">
+                <div class="stat-card">
+                    <span class="stat-number">50+</span>
+                    <span class="stat-label">Libros Disponibles</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">5</span>
+                    <span class="stat-label">Categorías</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">24/7</span>
+                    <span class="stat-label">Acceso Disponible</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-number">100%</span>
+                    <span class="stat-label">Gratis</span>
+                </div>
+            </div>
+
+            <div class="search-container">
+                <input type="text" class="search-input" placeholder="Buscar libros por título, autor o tema...">
+                <span class="search-icon">🔍</span>
+            </div>
+
+            <div class="filtros-container">
+                <button class="filtro-btn active" data-categoria="todas">Todas las Categorías</button>
+                <button class="filtro-btn" data-categoria="metodologia">Metodología</button>
+                <button class="filtro-btn" data-categoria="autoayuda">Autoayuda</button>
+                <button class="filtro-btn" data-categoria="tecnicas">Técnicas de Estudio</button>
+                <button class="filtro-btn" data-categoria="motivacion">Motivación</button>
+                <button class="filtro-btn" data-categoria="neurociencia">Neurociencia</button>
+            </div>
+
+            <!-- Metodología de Aprendizaje -->
+            <section class="categoria-section categoria-metodologia" data-categoria="metodologia">
+                <h2 class="categoria-title">📖 Metodología de Aprendizaje</h2>
+                <div class="libros-grid">
+                    <div class="libro-card">
+                        <div class="libro-portada">📚</div>
+                        <h3 class="libro-titulo">Cómo Aprendemos</h3>
+                        <p class="libro-autor">Benedict Carey</p>
+                        <p class="libro-descripcion">Una exploración fascinante de la ciencia del aprendizaje que revela técnicas sorprendentemente efectivas para retener y aplicar conocimientos.</p>
+                        <div class="libro-acciones">
+                            <a href="Image_fx (1).jpg" class="btn-libro btn-leer">📖 Leer</a>
+                            <a href="#" class="btn-libro btn-descargar">⬇️ Descargar</a>
+                            <button class="btn-libro btn-favorito">❤️</button>
+                        </div>
+                    </div>
+
+                    <div class="libro-card">
+                        <div class="libro-portada">🧠</div>
+                        <h3 class="libro-titulo">Make It Stick</h3>
+                        <p class="libro-autor">Peter Brown, Henry Roediger, Mark McDaniel</p>
+                        <p class="libro-descripcion">Los secretos del aprendizaje exitoso basados en investigación cognitiva. Estrategias que realmente funcionan para un aprendizaje duradero.</p>
+                        <div class="libro-acciones">
+                            <a href="Image_fx (1).jpg" class="btn-libro btn-leer">📖 Leer</a>
+                            <a href="#" class="btn-libro btn-descargar">⬇️ Descargar</a>
+                            <button class="btn-libro btn-favorito">❤️</button>
+                        </div>
+                    </div>
+
+                    <div class="libro-card">
+                        <div class="libro-portada">🎯</div>
+                        <h3 class="libro-titulo">Ultralearning</h3>
+                        <p class="libro-autor">Scott Young</p>
+                        <p class="libro-descripcion">Estrategias para el aprendizaje acelerado y la adquisición de habilidades de forma autodidacta y eficiente.</p>
+                        <div class="libro-acciones">
+                            <a href="Image_fx (1).jpg" class="btn-libro btn-leer">📖 Leer</a>
+                            <a href="#" class="btn-libro btn-descargar">⬇️ Descargar</a>
+                            <button class="btn-libro btn-favorito">❤️</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Autoayuda y Desarrollo Personal -->
+            <section class="categoria-section categoria-autoayuda" data-categoria="autoayuda">
+                <h2 class="categoria-title">🌟 Autoayuda y Desarrollo Personal</h2>
+                <div class="libros-grid">
+                    <div class="libro-card">
+                        <div class="libro-portada">💪</div>
+                        <h3 class="libro-titulo">Mentalidad de Crecimiento</h3>
+                        <p class="libro-autor">Carol Dweck</p>
+                        <p class="libro-descripcion">La nueva psicología del éxito. Cómo desarrollar una mentalidad que te permita alcanzar tu máximo potencial.</p>
+                        <div class="libro-acciones">
+                            <a href="Image_fx (1).jpg" class="btn-libro btn-leer">📖 Leer</a>
+                            <a href="#" class="btn-libro btn-descargar">⬇️ Descargar</a>
+                            <button class="btn-libro btn-favorito">❤️</button>
+                        </div>
+                    </div>
+
+                    <div class="libro-card">
+                        <div class="libro-portada">🚀</div>
+                        <h3 class="libro-titulo">Hábitos Atómicos</h3>
+                        <p class="libro-autor">James Clear</p>
+                        <p class="libro-descripcion">Un método sencillo y comprobado para desarrollar buenos hábitos y eliminar los malos, aplicable al aprendizaje y estudio.</p>
+                        <div class="libro-acciones">
+                            <a href="Image_fx (1).jpg" class="btn-libro btn-leer">📖 Leer</a>
+                            <a href="#" class="btn-libro btn-descargar">⬇️ Descargar</a>
+                            <button class="btn-libro btn-favorito">❤️</button>
+                        </div>
+                    </div>
+
+                    <div class="libro-card">
+                        <div class="libro-portada">⭐</div>
+                        <h3 class="libro-titulo">El Poder del Ahora</h3>
+                        <p class="libro-autor">Eckhart Tolle</p>
+                        <p class="libro-descripcion">Una guía hacia la iluminación espiritual que incluye técnicas de concentración y mindfulness útiles para el estudio.</p>
+                        <div class="libro-acciones">
+                            <a href="Image_fx (1).jpg" class="btn-libro btn-leer">📖 Leer</a>
+                            <a href="#" class="btn-libro btn-descargar">⬇️ Descargar</a>
+                            <button class="btn-libro btn-favorito">❤️</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Técnicas de Estudio -->
+            <section class="categoria-section categoria-tecnicas" data-categoria="tecnicas">
+                <h2 class="categoria-title">📝 Técnicas de Estudio</h2>
+                <div class="libros-grid">
+                    <div class="libro-card">
+                        <div class="libro-portada">⚡</div>
+                        <h3 class="libro-titulo">Técnica Pomodoro Ilustrada</h3>
+                        <p class="libro-autor">Staffan Nöteberg</p>
+                        <p class="libro-descripcion">La gestión del tiempo eficaz y sin estrés. Cómo ser más productivo en el estudio usando intervalos de tiempo.</p>
+                        <div class="libro-acciones">
+                            <a href="Image_fx (1).jpg" class="btn-libro btn-leer">📖 Leer</a>
+                            <a href="#" class="btn-libro btn-descargar">⬇️ Descargar</a>
+                            <button class="btn-libro btn-favorito">❤️</button>
+                        </div>
+                    </div>
+
+                    <div class="libro-card">
+                        <div class="libro-portada">🧩</div>
+                        <h3 class="libro-titulo">Mapas Mentales</h3>
+                        <p class="libro-autor">Tony Buzan</p>
+                        <p class="libro-descripción">Cómo utilizar al máximo las capacidades de la mente a través de técnicas de mapeo mental para el aprendizaje y la memoria.</p>
+                        <div class="libro-acciones">
+                            <a href="Image_fx (1).jpg" class="btn-libro btn-leer">📖 Leer</a>
+                            <a href="#" class="btn-libro btn-descargar">⬇️ Descargar</a>
+                            <button class="btn-libro btn-favorito">❤️</button>
+                        </div>
+                    </div>
+
+                    <div class="libro-card">
+                        <div class="libro-portada">🎪</div>
+                        <h3 class="libro-titulo">El Arte de la Memoria</h3>
+                        <p class="libro-autor">Joshua Foer</p>
+                        <p class="libro-descripcion">Los secretos de los campeones de memoria y cómo aplicar sus técnicas para mejorar el aprendizaje y retención.</p>
+                        <div class="libro-acciones">
+                            <a href="Image_fx (1).jpg" class="btn-libro btn-leer">📖 Leer</a>
+                            <a href="#" class="btn-libro btn-descargar">⬇️ Descargar</a>
+                            <button class="btn-libro btn-favorito">❤️</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Motivación y Productividad -->
+            <section class="categoria-section categoria-motivacion" data-categoria="motivacion">
+                <h2 class="categoria-title">🔥 Motivación y Productividad</h2>
+                <div class="libros-grid">
+                    <div class="libro-card">
+                        <div class="libro-portada">💎</div>
+                        <h3 class="libro-titulo">Fluir (Flow)</h3>
+                        <p class="libro-autor">Mihaly Csikszentmihalyi</p>
+                        <p class="libro-descripcion">Una psicología de la felicidad y el estado de flujo óptimo para el aprendizaje y la concentración profunda.</p>
+                        <div class="libro-acciones">
+                            <a href="Image_fx (1).jpg" class="btn-libro btn-leer">📖 Leer</a>
+                            <a href="#" class="btn-libro btn-descargar">⬇️ Descargar</a>
+                            <button class="btn-libro btn-favorito">❤️</button>
+                        </div>
+                    </div>
+
+                    <div class="libro-card">
+                        <div class="libro-portada">🎯</div>
+                        <h3 class="libro-titulo">Enfócate</h3>
+                        <p class="libro-autor">Daniel Goleman</p>
+                        <p class="libro-descripcion">La atención y sus diferentes tipos: interna, hacia los otros y externa. Claves para desarrollar la concentración.</p>
+                        <div class="libro-acciones">
+                            <a href="Image_fx (1).jpg" class="btn-libro btn-leer">📖 Leer</a>
+                            <a href="#" class="btn-libro btn-descargar">⬇️ Descargar</a>
+                            <button class="btn-libro btn-favorito">❤️</button>
+                        </div>
+                    </div>
+
+                    <div class="libro-card">
+                        <div class="libro-portada">⚗️</div>
+                        <h3 class="libro-titulo">El Elemento</h3>
+                        <p class="libro-autor">Ken Robinson</p>
+                        <p class="libro-descripcion">Descubrir tu pasión lo cambia todo. Cómo encontrar tus talentos y convertirlos en tu forma de aprender y vivir.</p>
+                        <div class="libro-acciones">
+                            <a href="Image_fx (1).jpg" class="btn-libro btn-leer">📖 Leer</a>
+                            <a href="#" class="btn-libro btn-descargar">⬇️ Descargar</a>
+                            <button class="btn-libro btn-favorito">❤️</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Neurociencia del Aprendizaje -->
+            <section class="categoria-section categoria-neurociencia" data-categoria="neurociencia">
+                <h2 class="categoria-title">🧬 Neurociencia del Aprendizaje</h2>
+                <div class="libros-grid">
+                    <div class="libro-card">
+                        <div class="libro-portada">🧠</div>
+                        <h3 class="libro-titulo">El Cerebro que Aprende</h3>
+                        <p class="libro-autor">Sarah-Jayne Blakemore</p>
+                        <p class="libro-descripcion">Neurociencia para el aula: cómo funciona el cerebro cuando aprendemos y cómo aplicar este conocimiento en la educación.</p>
+                        <div class="libro-acciones">
+                            <a href="Image_fx (1).jpg" class="btn-libro btn-leer">📖 Leer</a>
+                            <a href="#" class="btn-libro btn-descargar">⬇️ Descargar</a>
+                            <button class="btn-libro btn-favorito">❤️</button>
+                        </div>
+                    </div>
+
+                    <div class="libro-card">
+                        <div class="libro-portada">🔬</div>
+                        <h3 class="libro-titulo">El Cerebro del Niño</h3>
+                        <p class="libro-autor">Daniel Siegel</p>
+                        <p class="libro-descripcion">12 estrategias revolucionarias para cultivar la mente en desarrollo de tu hijo, aplicables a cualquier edad de aprendizaje.</p>
+                        <div class="libro-acciones">
+                            <a href="Image_fx (1).jpg" class="btn-libro btn-leer">📖 Leer</a>
+                            <a href="#" class="btn-libro btn-descargar">⬇️ Descargar</a>
+                            <button class="btn-libro btn-favorito">❤️</button>
+                        </div>
+                    </div>
+
+                    <div class="libro-card">
+                        <div class="libro-portada">⚡</div>
+                        <h3 class="libro-titulo">Neuroplasticidad</h3>
+                        <p class="libro-autor">Norman Doidge</p>
+                        <p class="libro-descripcion">El cerebro se cambia a sí mismo. Descubrimientos sobre la capacidad del cerebro para reorganizarse y adaptarse.</p>
+                        <div class="libro-acciones">
+                            <a href="Image_fx (1).jpg" class="btn-libro btn-leer">📖 Leer</a>
+                            <a href="#" class="btn-libro btn-descargar">⬇️ Descargar</a>
+                            <button class="btn-libro btn-favorito">❤️</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer id="contacto">
+        <p>&copy; 2025 Ignis Aprendizaje by Daniel Chango.</p>
+        <p>Biblioteca Virtual - Proyecto Final de Programación</p>
+    </footer>
+
+    <script src="script.js"></script>
+    <script>
+        // Funcionalidad adicional específica para la biblioteca
+        document.addEventListener('DOMContentLoaded', function() {
+            // Filtros de categorías
+            const filtros = document.querySelectorAll('.filtro-btn');
+            const categorias = document.querySelectorAll('.categoria-section');
+
+            filtros.forEach(filtro => {
+                filtro.addEventListener('click', function() {
+                    // Actualizar filtro activo
+                    filtros.forEach(f => f.classList.remove('active'));
+                    this.classList.add('active');
+
+                    const categoriaSeleccionada = this.dataset.categoria;
+
+                    // Mostrar/ocultar categorías
+                    categorias.forEach(categoria => {
+                        if (categoriaSeleccionada === 'todas' || categoria.dataset.categoria === categoriaSeleccionada) {
+                            categoria.style.display = 'block';
+                            categoria.style.opacity = '0';
+                            setTimeout(() => {
+                                categoria.style.opacity = '1';
+                            }, 100);
+                        } else {
+                            categoria.style.display = 'none';
+                        }
+                    });
+                });
+            });
+
+            // Funcionalidad de búsqueda
+            const searchInput = document.querySelector('.search-input');
+            const librosCards = document.querySelectorAll('.libro-card');
+
+            searchInput.addEventListener('input', function() {
+                const termino = this.value.toLowerCase();
+
+                librosCards.forEach(card => {
+                    const titulo = card.querySelector('.libro-titulo').textContent.toLowerCase();
+                    const autor = card.querySelector('.libro-autor').textContent.toLowerCase();
+                    const descripcion = card.querySelector('.libro-descripcion').textContent.toLowerCase();
+
+                    if (titulo.includes(termino) || autor.includes(termino) || descripcion.includes(termino)) {
+                        card.style.display = 'block';
+                        card.style.opacity = '1';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            });
+
+            // Funcionalidad de favoritos
+            const botonesFavorito = document.querySelectorAll('.btn-favorito');
+            
+            botonesFavorito.forEach(boton => {
+                boton.addEventListener('click', function() {
+                    if (this.classList.contains('favorito-activo')) {
+                        this.classList.remove('favorito-activo');
+                        this.innerHTML = '❤️';
+                        this.style.background = 'transparent';
+                        this.style.color = 'var(--primary-color)';
+                    } else {
+                        this.classList.add('favorito-activo');
+                        this.innerHTML = '💖';
+                        this.style.background = 'var(--primary-color)';
+                        this.style.color = 'white';
+                    }
+                });
+            });
+
+            // Animación de entrada para las tarjetas
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.opacity = '1';
+                        entry.target.style.transform = 'translateY(0)';
+                    }
+                });
+            }, {
+                threshold: 0.1
+            });
+
+            librosCards.forEach(card => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(30px)';
+                card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(card);
+            });
+        });
+    </script>
+</body>
+</html>

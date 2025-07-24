@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Radar de Habilidades Educativas</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #cd3c3c 0%, #a24b4b 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            text-align: center;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #fff;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1rem;
+            font-weight: 300;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            align-items: start;
+        }
+
+        .form-section {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .form-section h2 {
+            color: #684a4a;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #684a4a;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        input[type="text"], 
+        input[type="number"], 
+        select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #fff;
+        }
+
+        input[type="text"]:focus, 
+        input[type="number"]:focus, 
+        select:focus {
+            outline: none;
+            border-color: #c74848;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .range-container {
+            position: relative;
+            margin-top: 10px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 8px;
+            border-radius: 5px;
+            background: #e2e8f0;
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #b42d2d, #ef4545);
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #d64f4f, #dd4848);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .range-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+            font-size: 0.8rem;
+            color: #718096;
+        }
+
+        .range-value {
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fc7358;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .range-value.show {
+            opacity: 1;
+        }
+
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 20px;
+            padding: 15px;
+            background: #f7fafc;
+            border-radius: 12px;
+            border: 2px solid #e2e8f0;
+            transition: all 0.3s ease;
+        }
+
+        .checkbox-container:hover {
+            border-color: #ea6666;
+            background: #edf2f7;
+        }
+
+        input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .checkbox-container label {
+            margin: 0;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .generate-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #ea6666, #a24b4b);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 30px;
+            box-shadow: 0 8px 20px rgba(234, 102, 102, 0.3);
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 25px rgba(234, 102, 102, 0.4);
+        }
+
+        .generate-btn:active {
+            transform: translateY(0);
+        }
+
+        .chart-section {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+
+        .chart-section h2 {
+            color: #684a4a;
+            margin-bottom: 25px;
+            font-size: 1.8rem;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 400px;
+            width: 100%;
+        }
+
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 400px;
+            color: #a0aec0;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        .empty-state-text {
+            font-size: 1.1rem;
+            text-align: center;
+        }
+
+        .results-info {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f7fafc;
+            border-radius: 12px;
+            border-left: 4px solid #ea6666;
+            text-align: left;
+            display: none;
+        }
+
+        .results-info h3 {
+            color: #684a4a;
+            margin-bottom: 10px;
+        }
+
+        .results-info p {
+            color: #967171;
+            line-height: 1.6;
+        }
+
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding: 20px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-section, .chart-section {
+                padding: 25px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎯 Radar de Habilidades Educativas</h1>
+            <p class="subtitle">Evalúa y visualiza tus competencias clave para el aprendizaje</p>
+        </header>
+
+        <div class="main-content">
+            <div class="form-section">
+                <h2>📋 Evaluación Personal</h2>
+                <form id="formularioHabilidades">
+                    <!-- Información personal -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="nombre">👤 Nombre completo</label>
+                            <input type="text" id="nombre" placeholder="Ingresa tu nombre" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="edad">🎂 Edad</label>
+                            <input type="number" id="edad" min="10" max="99" placeholder="Ej: 20">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="curso">📚 Nivel académico</label>
+                        <select id="curso">
+                            <option value="Básico">Básico</option>
+                            <option value="Medio">Medio</option>
+                            <option value="Avanzado">Avanzado</option>
+                        </select>
+                    </div>
+
+                    <!-- Habilidades (1-10) -->
+                    <div class="form-group">
+                        <label for="comunicacion">💬 Comunicación</label>
+                        <div class="range-container">
+                            <input type="range" id="comunicacion" min="1" max="10" value="5">
+                            <div class="range-value" id="comunicacion-value">5</div>
+                        </div>
+                        <div class="range-labels">
+                            <span>Básico (1)</span>
+                            <span>Excelente (10)</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="problemas">🧩 Resolución de Problemas</label>
+                        <div class="range-container">
+                            <input type="range" id="problemas" min="1" max="10" value="5">
+                            <div class="range-value" id="problemas-value">5</div>
+                        </div>
+                        <div class="range-labels">
+                            <span>Básico (1)</span>
+                            <span>Excelente (10)</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="equipo">🤝 Trabajo en Equipo</label>
+                        <div class="range-container">
+                            <input type="range" id="equipo" min="1" max="10" value="5">
+                            <div class="range-value" id="equipo-value">5</div>
+                        </div>
+                        <div class="range-labels">
+                            <span>Básico (1)</span>
+                            <span>Excelente (10)</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="creatividad">🎨 Creatividad</label>
+                        <div class="range-container">
+                            <input type="range" id="creatividad" min="1" max="10" value="5">
+                            <div class="range-value" id="creatividad-value">5</div>
+                        </div>
+                        <div class="range-labels">
+                            <span>Básico (1)</span>
+                            <span>Excelente (10)</span>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="liderazgo">👑 Liderazgo</label>
+                        <div class="range-container">
+                            <input type="range" id="liderazgo" min="1" max="10" value="5">
+                            <div class="range-value" id="liderazgo-value">5</div>
+                        </div>
+                        <div class="range-labels">
+                            <span>Básico (1)</span>
+                            <span>Excelente (10)</span>
+                        </div>
+                    </div>
+
+                    <!-- Checkbox de motivación -->
+                    <div class="checkbox-container">
+                        <input type="checkbox" id="motivado">
+                        <label for="motivado">⚡ ¿Te sientes motivado/a para mejorar?</label>
+                    </div>
+
+                    <button type="button" class="generate-btn" onclick="generarRadar()">
+                        ✨ Generar Mi Radar de Habilidades
+                    </button>
+                </form>
+            </div>
+
+            <div class="chart-section">
+                <h2>📊 Tu Radar de Habilidades</h2>
+                <div class="chart-container">
+                    <div class="empty-state" id="emptyState">
+                        <div class="empty-state-icon">📈</div>
+                        <p class="empty-state-text">Completa el formulario para ver<br>tu radar personalizado</p>
+                    </div>
+                    <canvas id="graficoRadar" style="display: none;"></canvas>
+                </div>
+                <div class="results-info" id="resultsInfo">
+                    <h3>📋 Análisis de Resultados</h3>
+                    <p id="analysisText"></p>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p>© 2025 Ignis Aprendizaje - Desarrollado para potenciar tu crecimiento educativo</p>
+        </footer>
+    </div>
+
+    <script>
+        // Variables globales
+        let radarChart = null;
+
+        // Inicialización de eventos
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeRangeSliders();
+        });
+
+        /**
+         * Inicializa los sliders de rango con efectos visuales
+         */
+        function initializeRangeSliders() {
+            const ranges = ['comunicacion', 'problemas', 'equipo', 'creatividad', 'liderazgo'];
+            
+            ranges.forEach(id => {
+                const slider = document.getElementById(id);
+                const valueDisplay = document.getElementById(id + '-value');
+                
+                // Actualizar valor mostrado
+                slider.addEventListener('input', function() {
+                    valueDisplay.textContent = this.value;
+                    updateSliderPosition(this, valueDisplay);
+                });
+
+                // Mostrar valor al hacer hover
+                slider.addEventListener('mouseenter', function() {
+                    valueDisplay.classList.add('show');
+                });
+
+                slider.addEventListener('mouseleave', function() {
+                    valueDisplay.classList.remove('show');
+                });
+
+                // Mostrar valor al hacer focus (teclado)
+                slider.addEventListener('focus', function() {
+                    valueDisplay.classList.add('show');
+                });
+
+                slider.addEventListener('blur', function() {
+                    valueDisplay.classList.remove('show');
+                });
+
+                // Inicializar posición
+                updateSliderPosition(slider, valueDisplay);
+            });
+        }
+
+        /**
+         * Actualiza la posición del indicador de valor del slider
+         */
+        function updateSliderPosition(slider, valueDisplay) {
+            const percentage = ((slider.value - slider.min) / (slider.max - slider.min)) * 100;
+            valueDisplay.style.left = `${percentage}%`;
+        }
+
+        /**
+         * Genera el gráfico de radar con los datos del formulario
+         */
+        function generarRadar() {
+            // Obtener datos del formulario
+            const nombre = document.getElementById('nombre').value.trim();
+            const edad = parseInt(document.getElementById('edad').value);
+            const curso = document.getElementById('curso').value;
+            const motivado = document.getElementById('motivado').checked;
+
+            // Validación de campos obligatorios
+            if (!nombre) {
+                mostrarAlerta("⚠️ Por favor ingresa tu nombre", "error");
+                document.getElementById('nombre').focus();
+                return;
+            }
+
+            if (!edad || edad < 10 || edad > 99) {
+                mostrarAlerta("⚠️ Por favor ingresa una edad válida (10-99)", "error");
+                document.getElementById('edad').focus();
+                return;
+            }
+
+            // Obtener valores de habilidades
+            const habilidades = {
+                comunicacion: parseInt(document.getElementById('comunicacion').value),
+                problemas: parseInt(document.getElementById('problemas').value),
+                equipo: parseInt(document.getElementById('equipo').value),
+                creatividad: parseInt(document.getElementById('creatividad').value),
+                liderazgo: parseInt(document.getElementById('liderazgo').value)
+            };
+
+            // Crear el gráfico
+            crearGraficoRadar(nombre, curso, habilidades, motivado);
+            
+            // Mostrar análisis
+            mostrarAnalisis(nombre, habilidades, motivado);
+
+            // Mensaje de motivación
+            const mensaje = motivado ? 
+                `🎉 ¡Excelente, ${nombre}! Tu motivación es el motor que potenciará todas tus habilidades. ¡Sigue adelante!` :
+                `💪 ${nombre}, considera trabajar en tu motivación. Es la clave para desbloquear todo tu potencial.`;
+            
+            mostrarAlerta(mensaje, motivado ? "success" : "info");
+        }
+
+        /**
+         * Crea el gráfico de radar con Chart.js
+         */
+        function crearGraficoRadar(nombre, curso, habilidades, motivado) {
+            const ctx = document.getElementById('graficoRadar').getContext('2d');
+            
+            // Destruir gráfico anterior si existe
+            if (radarChart) {
+                radarChart.destroy();
+            }
+
+            // Ocultar estado vacío y mostrar canvas
+            document.getElementById('emptyState').style.display = 'none';
+            document.getElementById('graficoRadar').style.display = 'block';
+
+            // Datos para el gráfico
+            const labels = ['Comunicación', 'Resolución de Problemas', 'Trabajo en Equipo', 'Creatividad', 'Liderazgo'];
+            const data = [habilidades.comunicacion, habilidades.problemas, habilidades.equipo, habilidades.creatividad, habilidades.liderazgo];
+
+            // Configuración del gráfico
+            radarChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: `${nombre} (${curso})`,
+                        data: data,
+                        backgroundColor: motivado ? 
+                            'rgba(102, 126, 234, 0.2)' : 
+                            'rgba(118, 75, 162, 0.2)',
+                        borderColor: motivado ? 
+                            'rgba(102, 126, 234, 1)' : 
+                            'rgba(118, 75, 162, 1)',
+                        pointBackgroundColor: motivado ? 
+                            'rgba(102, 126, 234, 1)' : 
+                            'rgba(118, 75, 162, 1)',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 6,
+                        pointHoverRadius: 8,
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: true,
+                            position: 'top',
+                            labels: {
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                },
+                                color: '#4a5568',
+                                padding: 20
+                            }
+                        }
+                    },
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            min: 0,
+                            max: 10,
+                            ticks: {
+                                stepSize: 2,
+                                font: {
+                                    size: 12
+                                },
+                                color: '#718096'
+                            },
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            },
+                            angleLines: {
+                                color: 'rgba(0, 0, 0, 0.1)'
+                            },
+                            pointLabels: {
+                                font: {
+                                    size: 13,
+                                    weight: 'bold'
+                                },
+                                color: '#4a5568'
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 1500,
+                        easing: 'easeOutQuart'
+                    }
+                }
+            });
+        }
+
+        /**
+         * Muestra el análisis de resultados
+         */
+        function mostrarAnalisis(nombre, habilidades, motivado) {
+            const promedio = Object.values(habilidades).reduce((a, b) => a + b, 0) / 5;
+            const maxHabilidad = Object.keys(habilidades).reduce((a, b) => habilidades[a] > habilidades[b] ? a : b);
+            const minHabilidad = Object.keys(habilidades).reduce((a, b) => habilidades[a] < habilidades[b] ? a : b);
+
+            const nombresHabilidades = {
+                comunicacion: 'Comunicación',
+                problemas: 'Resolución de Problemas',
+                equipo: 'Trabajo en Equipo',
+                creatividad: 'Creatividad',
+                liderazgo: 'Liderazgo'
+            };
+
+            let analisis = `<strong>${nombre}</strong>, tu puntuación promedio es <strong>${promedio.toFixed(1)}/10</strong>. `;
+            analisis += `Tu fortaleza principal es <strong>${nombresHabilidades[maxHabilidad]}</strong> (${habilidades[maxHabilidad]}/10). `;
+            analisis += `El área con mayor potencial de mejora es <strong>${nombresHabilidades[minHabilidad]}</strong> (${habilidades[minHabilidad]}/10). `;
+            
+            if (motivado) {
+                analisis += `¡Tu motivación es excelente! Esto te ayudará a desarrollar todas tus habilidades.`;
+            } else {
+                analisis += `Considera trabajar en tu motivación para potenciar tu crecimiento.`;
+            }
+
+            document.getElementById('analysisText').innerHTML = analisis;
+            document.getElementById('resultsInfo').style.display = 'block';
+        }
+
+        /**
+         * Muestra alertas estilizadas
+         */
+        function mostrarAlerta(mensaje, tipo) {
+            // Crear elemento de alerta
+            const alerta = document.createElement('div');
+            alerta.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                padding: 15px 20px;
+                border-radius: 8px;
+                color: white;
+                font-weight: bold;
+                z-index: 1000;
+                max-width: 400px;
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+                animation: slideIn 0.3s ease-out;
+            `;
+
+            // Colores según el tipo
+            const colores = {
+                success: 'linear-gradient(135deg, #48bb78, #38a169)',
+                error: 'linear-gradient(135deg, #f56565, #e53e3e)',
+                info: 'linear-gradient(135deg, #4299e1, #3182ce)'
+            };
+
+            alerta.style.background = colores[tipo] || colores.info;
+            alerta.textContent = mensaje;
+
+            // Agregar al DOM
+            document.body.appendChild(alerta);
+
+            // Remover después de 4 segundos
+            setTimeout(() => {
+                alerta.style.animation = 'slideOut 0.3s ease-in';
+                setTimeout(() => {
+                    if (alerta.parentNode) {
+                        alerta.parentNode.removeChild(alerta);
+                    }
+                }, 300);
+            }, 4000);
+        }
+
+        // CSS para las animaciones de las alertas
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>

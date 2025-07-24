@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test de Felder-Silverman - Estilos de Aprendizaje</title>
+    <style>
+        /* Variables CSS para paleta de rojos oscuros */
+        :root {
+            --rojo-muy-oscuro: #4a0e0e;
+            --rojo-oscuro: #7a1a1a;
+            --rojo-medio: #a52a2a;
+            --rojo-claro: #cd5c5c;
+            --rojo-suave: #f5b2b2;
+            --blanco-roto: #fefefe;
+            --gris-claro: #f8f8f8;
+        }
+
+        /* Reset y estilos base con herencia */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            line-height: 1.6;
+            color: var(--rojo-muy-oscuro);
+            background: linear-gradient(135deg, var(--gris-claro) 0%, var(--rojo-suave) 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* Contenedor principal con posicionamiento relativo */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            position: relative;
+            background: var(--blanco-roto);
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(122, 26, 26, 0.2);
+            overflow: hidden;
+        }
+
+        /* Header con posicionamiento sticky */
+        .header {
+            position: sticky;
+            top: 0;
+            background: linear-gradient(45deg, var(--rojo-muy-oscuro), var(--rojo-oscuro));
+            color: var(--blanco-roto);
+            padding: 30px;
+            text-align: center;
+            z-index: 100;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        /* Elementos decorativos con pseudoelementos */
+        .header::before {
+            content: '';
+            position: absolute;
+            top: -50px;
+            right: -50px;
+            width: 100px;
+            height: 100px;
+            background: rgba(205, 92, 92, 0.1);
+            border-radius: 50%;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .header::after {
+            content: '';
+            position: absolute;
+            bottom: -30px;
+            left: -30px;
+            width: 60px;
+            height: 60px;
+            background: rgba(165, 42, 42, 0.1);
+            border-radius: 50%;
+            animation: float 4s ease-in-out infinite reverse;
+        }
+
+        /* Formulario principal */
+        .form-container {
+            padding: 40px;
+        }
+
+        /* Estilos para preguntas con selectores de clase */
+        .question-block {
+            margin-bottom: 30px;
+            padding: 25px;
+            background: var(--gris-claro);
+            border-left: 5px solid var(--rojo-medio);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            animation: slideInLeft 0.6s ease-out;
+        }
+
+        .question-block:hover {
+            transform: translateX(5px);
+            box-shadow: 0 8px 16px rgba(122, 26, 26, 0.15);
+            border-left-width: 8px;
+        }
+
+        /* Selector de ID para pregunta destacada */
+        #question-highlight {
+            background: linear-gradient(135deg, var(--rojo-suave), var(--gris-claro));
+            border-left-color: var(--rojo-oscuro);
+        }
+
+        .question-text {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: var(--rojo-muy-oscuro);
+        }
+
+        /* Opciones de respuesta */
+        .option-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            background: var(--blanco-roto);
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .option-item:hover {
+            background: var(--rojo-suave);
+            transform: scale(1.02);
+            border-color: var(--rojo-claro);
+        }
+
+        /* Pseudoclases para estados de radio buttons */
+        input[type="radio"] {
+            margin-right: 12px;
+            accent-color: var(--rojo-medio);
+            transform: scale(1.2);
+        }
+
+        input[type="radio"]:checked + label {
+            color: var(--rojo-oscuro);
+            font-weight: bold;
+        }
+
+        input[type="radio"]:focus {
+            outline: 2px solid var(--rojo-medio);
+            outline-offset: 2px;
+        }
+
+        /* Selector de elemento para labels */
+        label {
+            cursor: pointer;
+            flex: 1;
+            transition: color 0.3s ease;
+        }
+
+        /* Botones con animaciones */
+        .button-group {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 40px;
+            padding: 20px;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--rojo-medio), var(--rojo-oscuro));
+            color: var(--blanco-roto);
+            box-shadow: 0 4px 15px rgba(165, 42, 42, 0.3);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: var(--rojo-medio);
+            border: 2px solid var(--rojo-medio);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(122, 26, 26, 0.4);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(45deg, var(--rojo-oscuro), var(--rojo-muy-oscuro));
+        }
+
+        .btn-secondary:hover {
+            background: var(--rojo-medio);
+            color: var(--blanco-roto);
+        }
+
+        /* Efecto de onda en botones con pseudoelemento */
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.6s ease;
+        }
+
+        .btn:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        /* Barra de progreso con posicionamiento fijo */
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 0%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--rojo-medio), var(--rojo-claro));
+            z-index: 1000;
+            transition: width 0.3s ease;
+            box-shadow: 0 2px 4px rgba(165, 42, 42, 0.3);
+        }
+
+        /* Sección multimedia */
+        .multimedia-section {
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(135deg, var(--rojo-suave), rgba(245, 178, 178, 0.3));
+            margin: 20px 0;
+            border-radius: 10px;
+        }
+
+        .multimedia-section img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(122, 26, 26, 0.2);
+            animation: zoomIn 1s ease-out;
+        }
+
+        /* Estilos para resultados mejorados */
+        .results-container {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--blanco-roto);
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 -10px 30px rgba(122, 26, 26, 0.2);
+            transform: translateY(20px);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s ease;
+            min-height: 600px;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--rojo-suave);
+        }
+
+        .results-header h2 {
+            color: var(--rojo-oscuro);
+            font-size: 2em;
+            margin: 0;
+        }
+
+        .results-actions {
+            display: flex;
+            gap: 15px;
+        }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto 30px;
+            padding: 20px;
+            background: var(--gris-claro);
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(122, 26, 26, 0.1);
+        }
+
+        .chart-legend {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9em;
+        }
+
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 3px;
+        }
+
+        .results-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .dimension-card {
+            background: linear-gradient(135deg, var(--gris-claro), var(--rojo-suave));
+            padding: 20px;
+            border-radius: 12px;
+            border-left: 5px solid var(--rojo-medio);
+            transition: all 0.3s ease;
+            animation: slideInUp 0.6s ease-out;
+        }
+
+        .dimension-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(122, 26, 26, 0.15);
+        }
+
+        .dimension-title {
+            color: var(--rojo-oscuro);
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .dimension-result {
+            font-size: 1.1em;
+            color: var(--rojo-muy-oscuro);
+            margin-bottom: 8px;
+        }
+
+        .dimension-percentage {
+            font-weight: bold;
+            color: var(--rojo-medio);
+        }
+
+        .progress-visual {
+            width: 100%;
+            height: 8px;
+            background: rgba(122, 26, 26, 0.2);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--rojo-medio), var(--rojo-oscuro));
+            border-radius: 4px;
+            transition: width 1s ease-out;
+            animation: fillProgress 2s ease-out;
+        }
+
+        .recommendations {
+            background: linear-gradient(135deg, var(--rojo-suave), rgba(245, 178, 178, 0.3));
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 30px;
+        }
+
+        .recommendations h3 {
+            color: var(--rojo-oscuro);
+            margin-bottom: 15px;
+        }
+
+        .recommendation-item {
+            background: var(--blanco-roto);
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border-left: 4px solid var(--rojo-medio);
+            box-shadow: 0 2px 8px rgba(122, 26, 26, 0.1);
+        }
+
+        /* Estilos para impresión */
+        @media print {
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            
+            .header, .form-container, .button-group {
+                display: none !important;
+            }
+            
+            .results-container {
+                position: static !important;
+                transform: none !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+                box-shadow: none !important;
+                padding: 20px !important;
+            }
+            
+            .results-actions {
+                display: none !important;
+            }
+            
+            .chart-container {
+                background: white !important;
+                box-shadow: 1px 1px 3px rgba(0,0,0,0.2) !important;
+            }
+            
+            .dimension-card {
+                background: #f8f8f8 !important;
+                border: 1px solid #ccc !important;
+                break-inside: avoid;
+            }
+        }
+
+        @keyframes slideInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fillProgress {
+            from {
+                width: 0%;
+            }
+            to {
+                width: var(--target-width);
+            }
+        }
+
+        .results-container.show {
+            transform: translateY(0);
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Animaciones con keyframes */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(165, 42, 42, 0.7);
+            }
+            70% {
+                box-shadow: 0 0 0 10px rgba(165, 42, 42, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(165, 42, 42, 0);
+            }
+        }
+
+        /* Pseudoclases para nth-child */
+        .question-block:nth-child(odd) {
+            animation-delay: 0.1s;
+        }
+
+        .question-block:nth-child(even) {
+            animation-delay: 0.2s;
+        }
+
+        /* Primera pregunta con estilo especial */
+        .question-block:first-child {
+            border-left-color: var(--rojo-oscuro);
+            border-left-width: 8px;
+        }
+
+        /* Última pregunta con animación especial */
+        .question-block:last-child {
+            animation: pulse 2s infinite;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 10px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
+            
+            .button-group {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+
+        /* Loader con posicionamiento fijo */
+        .loader {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50px;
+            height: 50px;
+            border: 5px solid var(--rojo-suave);
+            border-top: 5px solid var(--rojo-medio);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            z-index: 2000;
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-bar" id="progressBar"></div>
+    <div class="loader" id="loader"></div>
+
+    <div class="container">
+        <header class="header">
+            <h1>Test de Felder-Silverman</h1>
+            <p>Descubre tu estilo de aprendizaje personal</p>
+        </header>
+
+        <div class="multimedia-section">
+            <svg width="200" height="150" viewBox="0 0 200 150">
+                <defs>
+                    <linearGradient id="brainGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#a52a2a"/>
+                        <stop offset="100%" style="stop-color:#7a1a1a"/>
+                    </linearGradient>
+                </defs>
+                <path d="M50 75 Q 100 25, 150 75 Q 125 125, 100 100 Q 75 125, 50 75" 
+                    fill="url(#brainGradient)" opacity="0.8"/>
+                <circle cx="80" cy="60" r="8" fill="#4a0e0e"/>
+                <circle cx="120" cy="60" r="8" fill="#4a0e0e"/>
+                <path d="M90 80 Q 100 90, 110 80" stroke="#4a0e0e" stroke-width="2" fill="none"/>
+            </svg>
+            <p>Conoce cómo procesas mejor la información</p>
+        </div>
+
+        <form class="form-container" id="learningStyleForm">
+            <div class="question-block" id="question-highlight">
+                <div class="question-text">1. Cuando estudio para un examen, prefiero:</div>
+                <div class="option-group">
+                    <div class="option-item">
+                        <input type="radio" id="q1a" name="q1" value="a">
+                        <label for="q1a">Hacer ejercicios prácticos y resolver problemas similares</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q1b" name="q1" value="b">
+                        <label for="q1b">Leer la teoría y reflexionar sobre los conceptos</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <div class="question-text">2. Para entender mejor un tema nuevo, necesito:</div>
+                <div class="option-group">
+                    <div class="option-item">
+                        <input type="radio" id="q2a" name="q2" value="a">
+                        <label for="q2a">Ver ejemplos concretos y aplicaciones reales</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q2b" name="q2" value="b">
+                        <label for="q2b">Entender primero la teoría y los principios generales</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <div class="question-text">3. Cuando resuelvo problemas, tiendo a:</div>
+                <div class="option-group">
+                    <div class="option-item">
+                        <input type="radio" id="q3a" name="q3" value="a">
+                        <label for="q3a">Seguir pasos ordenados y sistemáticos</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q3b" name="q3" value="b">
+                        <label for="q3b">Hacer conexiones creativas y saltar entre ideas</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <div class="question-text">4. Aprendo mejor cuando la información se presenta:</div>
+                <div class="option-group">
+                    <div class="option-item">
+                        <input type="radio" id="q4a" name="q4" value="a">
+                        <label for="q4a">De forma visual con diagramas, gráficos y esquemas</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q4b" name="q4" value="b">
+                        <label for="q4b">A través de explicaciones verbales y textos</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <div class="question-text">5. Cuando trabajo en equipo, prefiero:</div>
+                <div class="option-group">
+                    <div class="option-item">
+                        <input type="radio" id="q5a" name="q5" value="a">
+                        <label for="q5a">Discutir ideas y colaborar activamente</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q5b" name="q5" value="b">
+                        <label for="q5b">Trabajar independientemente y luego compartir resultados</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <div class="question-text">6. Mi forma de procesar información es más:</div>
+                <div class="option-group">
+                    <div class="option-item">
+                        <input type="radio" id="q6a" name="q6" value="a">
+                        <label for="q6a">Paso a paso, construyendo comprensión gradualmente</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q6b" name="q6" value="b">
+                        <label for="q6b">Global, viendo primero el panorama completo</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <div class="question-text">7. Para recordar información, me ayuda más:</div>
+                <div class="option-group">
+                    <div class="option-item">
+                        <input type="radio" id="q7a" name="q7" value="a">
+                        <label for="q7a">Repetir y practicar activamente</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q7b" name="q7" value="b">
+                        <label for="q7b">Reflexionar y hacer conexiones mentales</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="question-block">
+                <div class="question-text">8. Cuando leo instrucciones, prefiero:</div>
+                <div class="option-group">
+                    <div class="option-item">
+                        <input type="radio" id="q8a" name="q8" value="a">
+                        <label for="q8a">Diagramas de flujo y representaciones gráficas</label>
+                    </div>
+                    <div class="option-item">
+                        <input type="radio" id="q8b" name="q8" value="b">
+                        <label for="q8b">Explicaciones detalladas por escrito</label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="button-group">
+                <button type="button" class="btn btn-secondary" onclick="resetForm()">Reiniciar</button>
+                <button type="submit" class="btn btn-primary">Obtener Resultados</button>
+            </div>
+        </form>
+
+        <div class="results-container" id="resultsContainer">
+            <div class="results-header">
+                <h2>Tu Perfil de Aprendizaje Personalizado</h2>
+                <div class="results-actions">
+                    <button class="btn btn-secondary" onclick="toggleChartType()">
+                        <span id="chartToggleText">Ver Radar</span>
+                    </button>
+                    <button class="btn btn-primary" onclick="printResults()">
+                        📊 Imprimir Resultados
+                    </button>
+                </div>
+            </div>
+            <div id="resultsContent">
+                <div class="chart-container">
+                    <canvas id="resultsChart" width="400" height="400"></canvas>
+                </div>
+                <div class="results-details" id="resultsDetails"></div>
+                <div class="recommendations" id="recommendations"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <script>
+        // Variables para el manejo del formulario y gráficos
+        let currentProgress = 0;
+        let currentChart = null;
+        let chartType = 'bar'; // 'bar' o 'radar'
+        const totalQuestions = 8; // Número total de preguntas
+
+        // Actualizar barra de progreso
+        function updateProgress() {
+            const answered = document.querySelectorAll('input[type="radio"]:checked').length;
+            const progress = (answered / totalQuestions) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        // Event listeners para las respuestas
+        document.querySelectorAll('input[type="radio"]').forEach(radio => {
+            radio.addEventListener('change', updateProgress);
+        });
+
+        // Función para reiniciar el formulario
+        function resetForm() {
+            document.getElementById('learningStyleForm').reset();
+            updateProgress();
+            document.getElementById('resultsContainer').classList.remove('show');
+            document.getElementById('resultsDetails').innerHTML = '';
+            document.getElementById('recommendations').innerHTML = '';
+            if (currentChart) {
+                currentChart.destroy();
+                currentChart = null;
+            }
+            chartType = 'bar';
+            document.getElementById('chartToggleText').textContent = 'Ver Radar';
+        }
+
+        // Procesar resultados del test
+        function processResults(formData) {
+            const results = {
+                active: 0,
+                reflective: 0,
+                sensing: 0,
+                intuitive: 0,
+                visual: 0,
+                verbal: 0,
+                sequential: 0,
+                global: 0
+            };
+
+            // Lógica para procesar respuestas de Felder-Silverman (8 preguntas simplificadas)
+            // Cada pregunta contribuye a una de las dos preferencias en una dimensión.
+            // Para un test más completo, cada pregunta (en el ILS real) contribuye a un único punto en una dimensión.
+            // Aquí, para 8 preguntas, se han mapeado arbitrariamente para cubrir las 4 dimensiones.
+            const questionsMap = {
+                1: { 'a': 'active', 'b': 'reflective' }, // Activo vs Reflexivo
+                2: { 'a': 'sensing', 'b': 'intuitive' }, // Sensorial vs Intuitivo
+                3: { 'a': 'sequential', 'b': 'global' }, // Secuencial vs Global
+                4: { 'a': 'visual', 'b': 'verbal' },     // Visual vs Verbal
+                5: { 'a': 'active', 'b': 'reflective' }, // Activo vs Reflexivo
+                6: { 'a': 'sequential', 'b': 'global' }, // Secuencial vs Global
+                7: { 'a': 'active', 'b': 'reflective' }, // Activo vs Reflexivo
+                8: { 'a': 'visual', 'b': 'verbal' }      // Visual vs Verbal
+            };
+
+            for (let i = 1; i <= totalQuestions; i++) {
+                const answer = formData.get(`q${i}`);
+                if (answer && questionsMap[i]) {
+                    const dimensionKey = questionsMap[i][answer];
+                    results[dimensionKey]++;
+                }
+            }
+            return results;
+        }
+
+        // Crear gráfico interactivo (barras o radar)
+        function createInteractiveChart(results) {
+            const ctx = document.getElementById('resultsChart').getContext('2d');
+            
+            // Destruir gráfico anterior si existe
+            if (currentChart) {
+                currentChart.destroy();
+            }
+
+            const dimensionsData = [
+                {
+                    name: 'Procesamiento',
+                    a: { name: 'Activo', score: results.active },
+                    b: { name: 'Reflexivo', score: results.reflective },
+                    type: (results.active >= results.reflective ? 'Activo' : 'Reflexivo')
+                },
+                {
+                    name: 'Percepción',
+                    a: { name: 'Sensorial', score: results.sensing },
+                    b: { name: 'Intuitivo', score: results.intuitive },
+                    type: (results.sensing >= results.intuitive ? 'Sensorial' : 'Intuitivo')
+                },
+                {
+                    name: 'Entrada',
+                    a: { name: 'Visual', score: results.visual },
+                    b: { name: 'Verbal', score: results.verbal },
+                    type: (results.visual >= results.verbal ? 'Visual' : 'Verbal')
+                },
+                {
+                    name: 'Comprensión',
+                    a: { name: 'Secuencial', score: results.sequential },
+                    b: { name: 'Global', score: results.global },
+                    type: (results.sequential >= results.global ? 'Secuencial' : 'Global')
+                }
+            ];
+
+            if (chartType === 'radar') {
+                createRadarChart(ctx, dimensionsData);
+            } else {
+                createBarChart(ctx, dimensionsData);
+            }
+            displayResultsDetails(dimensionsData);
+            displayRecommendations(dimensionsData);
+        }
+
+        // Crear gráfico de barras
+        function createBarChart(ctx, dimensionsData) {
+            const labels = [];
+            const data = [];
+            const backgroundColors = [];
+            const borderColors = [];
+            
+            dimensionsData.forEach(dim => {
+                const dominant = dim.a.score >= dim.b.score ? dim.a : dim.b;
+                const total = dim.a.score + dim.b.score;
+                const percentage = total > 0 ? Math.round((dominant.score / total) * 100) : 0;
+                
+                labels.push(`${dim.name} (${dominant.name})`);
+                data.push(percentage);
+                
+                // Define colores del degradado
+                const gradient = ctx.createLinearGradient(0, 0, 0, 400);
+                gradient.addColorStop(0, getComputedStyle(document.documentElement).getPropertyValue('--rojo-medio'));
+                gradient.addColorStop(1, getComputedStyle(document.documentElement).getPropertyValue('--rojo-oscuro'));
+                backgroundColors.push(gradient);
+                borderColors.push(getComputedStyle(document.documentElement).getPropertyValue('--rojo-muy-oscuro'));
+            });
+
+            currentChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Preferencia (%)',
+                        data: data,
+                        backgroundColor: backgroundColors,
+                        borderColor: borderColors,
+                        borderWidth: 2,
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: {
+                        duration: 2000,
+                        easing: 'easeOutBounce'
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(74, 14, 14, 0.9)',
+                            titleColor: '#fefefe',
+                            bodyColor: '#fefefe',
+                            borderColor: '#a52a2a',
+                            borderWidth: 1,
+                            cornerRadius: 8,
+                            callbacks: {
+                                label: function(context) {
+                                    return `Preferencia: ${context.parsed.y}%`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                color: getComputedStyle(document.documentElement).getPropertyValue('--rojo-oscuro'),
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(165, 42, 42, 0.1)'
+                            }
+                        },
+                        x: {
+                            ticks: {
+                                color: getComputedStyle(document.documentElement).getPropertyValue('--rojo-oscuro')
+                            },
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Crear gráfico de radar
+        function createRadarChart(ctx, dimensionsData) {
+            const labels = dimensionsData.map(dim => dim.name);
+            const data = dimensionsData.map(dim => {
+                const dominant = dim.a.score >= dim.b.score ? dim.a : dim.b;
+                const total = dim.a.score + dim.b.score;
+                return total > 0 ? Math.round((dominant.score / total) * 100) : 0;
+            });
+            const specificLabels = dimensionsData.map(dim => dim.type);
+
+            currentChart = new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Preferencia (%)',
+                        data: data,
+                        backgroundColor: 'rgba(205, 92, 92, 0.4)',
+                        borderColor: getComputedStyle(document.documentElement).getPropertyValue('--rojo-oscuro'),
+                        borderWidth: 2,
+                        pointBackgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--rojo-muy-oscuro'),
+                        pointBorderColor: getComputedStyle(document.documentElement).getPropertyValue('--blanco-roto'),
+                        pointHoverBackgroundColor: getComputedStyle(document.documentElement).getPropertyValue('--blanco-roto'),
+                        pointHoverBorderColor: getComputedStyle(document.documentElement).getPropertyValue('--rojo-muy-oscuro')
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    animation: {
+                        duration: 2000,
+                        easing: 'easeOutQuart'
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(74, 14, 14, 0.9)',
+                            titleColor: '#fefefe',
+                            bodyColor: '#fefefe',
+                            borderColor: '#a52a2a',
+                            borderWidth: 1,
+                            cornerRadius: 8,
+                            callbacks: {
+                                label: function(context) {
+                                    return `${specificLabels[context.dataIndex]}: ${context.parsed.r}%`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            pointLabels: {
+                                color: getComputedStyle(document.documentElement).getPropertyValue('--rojo-oscuro'),
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            },
+                            grid: {
+                                color: 'rgba(165, 42, 42, 0.2)'
+                            },
+                            angleLines: {
+                                color: 'rgba(165, 42, 42, 0.3)'
+                            },
+                            ticks: {
+                                display: false,
+                                maxTicksLimit: 4 // Reduced ticks for cleaner look
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Alternar tipo de gráfico
+        function toggleChartType() {
+            chartType = chartType === 'bar' ? 'radar' : 'bar';
+            document.getElementById('chartToggleText').textContent = chartType === 'bar' ? 'Ver Radar' : 'Ver Barras';
+            const formData = new FormData(document.getElementById('learningStyleForm'));
+            const results = processResults(formData);
+            createInteractiveChart(results);
+        }
+
+        // Mostrar detalles de los resultados
+        function displayResultsDetails(dimensionsData) {
+            const detailsContainer = document.getElementById('resultsDetails');
+            detailsContainer.innerHTML = ''; // Limpiar resultados anteriores
+
+            const descriptions = {
+                'Activo': 'Prefieres aprender haciendo, discutiendo y aplicando la información. Te sientes cómodo con la experimentación y el trabajo en grupo.',
+                'Reflexivo': 'Prefieres aprender pensando en la información, analizando y trabajando solo. Te tomas tu tiempo para procesar y comprender a fondo.',
+                'Sensorial': 'Te orientas a los hechos, los datos y las aplicaciones prácticas. Prefieres la información concreta y los detalles.',
+                'Intuitivo': 'Te inclinas por los conceptos abstractos, las teorías y las posibilidades. Te sientes atraído por la innovación y las ideas grandes.',
+                'Visual': 'Aprendes mejor viendo diagramas, gráficos, imágenes y demostraciones. La información visual te ayuda a retener y comprender.',
+                'Verbal': 'Prefieres aprender a través de palabras, ya sean escritas u orales. Te sientes cómodo con lecturas, explicaciones y discusiones verbales.',
+                'Secuencial': 'Te gusta aprender en pasos lógicos y progresivos, construyendo tu comprensión de forma lineal y ordenada.',
+                'Global': 'Prefieres entender el panorama general antes de los detalles. Tiendes a hacer conexiones entre diferentes temas rápidamente.'
+            };
+
+            dimensionsData.forEach(dim => {
+                const dominant = dim.a.score >= dim.b.score ? dim.a : dim.b;
+                const total = dim.a.score + dim.b.score;
+                const percentage = total > 0 ? Math.round((dominant.score / total) * 100) : 0;
+
+                const card = document.createElement('div');
+                card.classList.add('dimension-card');
+                card.innerHTML = `
+                    <div class="dimension-title">${dim.name}</div>
+                    <div class="dimension-result">Dominancia: <strong>${dominant.name}</strong></div>
+                    <div class="dimension-percentage">${percentage}% de preferencia</div>
+                    <div class="progress-visual">
+                        <div class="progress-fill" style="width: ${percentage}%"></div>
+                    </div>
+                    <p class="mt-2">${descriptions[dominant.name]}</p>
+                `;
+                detailsContainer.appendChild(card);
+            });
+        }
+
+        // Mostrar recomendaciones personalizadas
+        function displayRecommendations(dimensionsData) {
+            const recommendationsContainer = document.getElementById('recommendations');
+            recommendationsContainer.innerHTML = '<h3>Recomendaciones para tu estilo de aprendizaje:</h3>';
+
+            const recommendationsList = [];
+
+            dimensionsData.forEach(dim => {
+                const dominant = dim.a.score >= dim.b.score ? dim.a : dim.b;
+                
+                switch (dominant.name) {
+                    case 'Activo':
+                        recommendationsList.push("Participa en debates, discusiones y actividades prácticas. Prueba a enseñar el material a otros o a aplicarlo en proyectos.");
+                        break;
+                    case 'Reflexivo':
+                        recommendationsList.push("Dedica tiempo a reflexionar sobre lo que aprendes, a escribir resúmenes o a elaborar mapas conceptuales. Trabaja en entornos tranquilos.");
+                        break;
+                    case 'Sensorial':
+                        recommendationsList.push("Busca ejemplos concretos, estudios de caso y aplicaciones reales. Enlaza los conceptos nuevos con experiencias pasadas.");
+                        break;
+                    case 'Intuitivo':
+                        recommendationsList.push("Enfócate en entender los principios y teorías. Busca las conexiones y el 'por qué' detrás de la información. Piensa en nuevas posibilidades.");
+                        break;
+                    case 'Visual':
+                        recommendationsList.push("Utiliza diagramas, mapas mentales, infografías y videos. Colorea tus notas y crea visualizaciones de la información.");
+                        break;
+                    case 'Verbal':
+                        recommendationsList.push("Lee en voz alta, participa en discusiones, explica ideas a otros y haz resúmenes escritos. Graba lecciones y escúchalas.");
+                        break;
+                    case 'Secuencial':
+                        recommendationsList.push("Sigue un plan de estudio paso a paso. Asegúrate de entender cada concepto antes de pasar al siguiente. Organiza la información lógicamente.");
+                        break;
+                    case 'Global':
+                        recommendationsList.push("Intenta obtener una visión general del tema antes de sumergirte en los detalles. Busca conexiones entre diferentes ideas y saltos creativos.");
+                        break;
+                }
+            });
+
+            recommendationsList.forEach(rec => {
+                const item = document.createElement('div');
+                item.classList.add('recommendation-item');
+                item.textContent = rec;
+                recommendationsContainer.appendChild(item);
+            });
+        }
+
+
+        // Enviar formulario
+        document.getElementById('learningStyleForm').addEventListener('submit', function(event) {
+            event.preventDefault(); // Evitar el envío tradicional del formulario
+            
+            const loader = document.getElementById('loader');
+            const resultsContainer = document.getElementById('resultsContainer');
+            const formContainer = document.querySelector('.form-container');
+
+            // Mostrar loader
+            loader.style.display = 'block';
+            formContainer.style.opacity = '0.5'; // Atenuar formulario mientras carga
+
+            // Simular un retraso para la "carga" de resultados
+            setTimeout(() => {
+                const formData = new FormData(event.target);
+                const results = processResults(formData);
+                createInteractiveChart(results); // Crear el gráfico y detalles
+                
+                // Ocultar loader y mostrar resultados
+                loader.style.display = 'none';
+                formContainer.style.opacity = '1';
+                resultsContainer.classList.add('show');
+
+                // Desplazarse a la sección de resultados
+                resultsContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 1500); // 1.5 segundos de simulación de carga
+        });
+
+        // Función para imprimir resultados
+        function printResults() {
+            window.print();
+        }
+
+        // Inicializar barra de progreso al cargar la página
+        document.addEventListener('DOMContentLoaded', updateProgress);
+    </script>
+</body>
+</html>

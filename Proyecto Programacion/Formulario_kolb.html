@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Test de Kolb - Descubre tu Filosofía de Aprendizaje</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #fef2f2, #ffe4e6);
+    color: #2d2d2d;
+    margin: 0;
+    padding: 40px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+  }
+
+  h2 {
+    color: #991b1b;
+    font-size: 2.5em;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  form {
+    background: #fff1f2;
+    padding: 40px;
+    max-width: 800px;
+    width: 100%;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+    border: 1px solid #fecaca;
+  }
+
+  .form-group {
+    margin-bottom: 25px;
+  }
+
+  label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #7f1d1d;
+  }
+
+  input[type=range], input[type=text], select, textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #fca5a5;
+    border-radius: 8px;
+    font-size: 1em;
+    margin-top: 5px;
+    background-color: #fff;
+  }
+
+  input[type=radio], input[type=checkbox] {
+    margin-right: 8px;
+  }
+
+  .btn-submit {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #ef4444, #b91c1c);
+    color: white;
+    font-weight: bold;
+    font-size: 1.1em;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+
+  .btn-submit:hover {
+    background: linear-gradient(135deg, #dc2626, #7f1d1d);
+  }
+
+  #resultado {
+    margin-top: 30px;
+    background-color: #ffe4e6;
+    border-left: 6px solid #dc2626;
+    padding: 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    color: #7f1d1d;
+    display: none;
+    animation: fadeIn 0.8s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .pixel-art {
+    display: none;
+    margin-top: 20px;
+    width: 120px; /* Changed from 100px to 120px as per the second snippet */
+    height: 120px; /* Changed from 100px to 120px as per the second snippet */
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    animation: fadeIn 1s ease forwards, float 3s ease-in-out infinite;
+  }
+
+  @keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+
+  footer {
+    margin-top: 40px;
+    font-size: 0.9em;
+    color: #991b1b;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<h2>Test de Kolb + Recomendación Filosófica</h2>
+<form id="kolbForm">
+  <div class="form-group">
+    <label>1. ¿Prefieres aprender a través de:</label>
+    <label><input type="radio" name="learning_style" value="Experiencial" required> Experiencia práctica</label>
+    <label><input type="radio" name="learning_style" value="Reflexivo"> Reflexión y análisis</label>
+  </div>
+
+  <div class="form-group">
+    <label>2. ¿Qué tanto te identificas con la teoría en tu aprendizaje? (1-10)</label>
+    <input type="range" name="theory" min="1" max="10" value="5" oninput="document.getElementById('theoryValue').textContent = this.value">
+    <span id="theoryValue">5</span>
+  </div>
+
+  <div class="form-group">
+    <label>3. Métodos que usas con frecuencia:</label>
+    <label><input type="checkbox" name="methods[]" value="Visual"> Visual</label>
+    <label><input type="checkbox" name="methods[]" value="Auditivo"> Auditivo</label>
+    <label><input type="checkbox" name="methods[]" value="Kinestésico"> Kinestésico</label>
+    <label><input type="checkbox" name="methods[]" value="Lectura"> Lectura/Escritura</label>
+    <label><input type="checkbox" name="methods[]" value="Discusión"> Discusión</label>
+    <label><input type="checkbox" name="methods[]" value="Resolución de problemas"> Resolución de problemas</label>
+  </div>
+
+  <div class="form-group">
+    <label>4. ¿Prefieres estudiar solo o en grupo?</label>
+    <label><input type="radio" name="study_group" value="Solo" required> Solo</label>
+    <label><input type="radio" name="study_group" value="Grupo"> En grupo</label>
+  </div>
+
+  <div class="form-group">
+    <label>5. Describe brevemente cómo aprendes mejor:</label>
+    <textarea name="description" rows="4"></textarea>
+  </div>
+
+  <div class="form-group">
+    <label>6. ¿Cuál de estas frases resuena más contigo?</label>
+    <select name="philosophy">
+      <option value="Sócrates">"Conócete a ti mismo"</option>
+      <option value="Nietzsche">"Lo que no te mata te hace más fuerte"</option>
+      <option value="Kant">"Atrévete a pensar"</option>
+      <option value="Confucio">"Estudia el pasado si quieres pronosticar el futuro"</option>
+      <option value="Heidegger">"El lenguaje es la casa del ser"</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label>7. ¿Te resulta más fácil aprender cuando...?</label>
+    <label><input type="radio" name="context" value="Estructurado"> Hay estructura y claridad</label>
+    <label><input type="radio" name="context" value="Flexible"> Hay libertad y exploración</label>
+  </div>
+
+  <div class="form-group">
+    <label>8. ¿Te motiva más el conocimiento útil o el conocimiento por sí mismo?</label>
+    <label><input type="radio" name="motivation" value="Práctico"> Lo útil</label>
+    <label><input type="radio" name="motivation" value="Teórico"> La teoría y la curiosidad</label>
+  </div>
+
+  <div class="form-group">
+    <button type="submit" class="btn-submit">Obtener Recomendación</button>
+  </div>
+</form>
+
+<div id="resultado"></div>
+<div class="pixel-art" id="pixelArt"></div>
+
+<footer>
+  <p>&copy; 2025 Ignis Aprendizaje by Daniel Chango. Todos los derechos reservados.</p>
+</footer>
+
+<script>
+  document.getElementById('kolbForm').addEventListener('submit', function (e) {
+    e.preventDefault();
+    const data = new FormData(this);
+    const style = data.get('learning_style');
+    const group = data.get('study_group');
+    const phrase = data.get('philosophy');
+    const context = data.get('context');
+    const motivation = data.get('motivation');
+
+    let recommendation = '';
+    let pixelUrl = ''; // Initialize pixelUrl here
+
+    if (style === 'Experiencial' && group === 'Grupo' && motivation === 'Práctico') {
+      recommendation = 'Tu camino filosófico recuerda al pragmatismo de John Dewey y la ética práctica de Aristóteles.';
+      pixelUrl = 'https://i.imgur.com/HMyygUn.gif'; // Aristóteles
+    } else if (style === 'Reflexivo' && group === 'Solo' && motivation === 'Teórico') {
+      recommendation = 'Eres un contemplativo profundo, cercano a Kant, Simone Weil y los estoicos.';
+      pixelUrl = 'https://i.imgur.com/I8NB0xT.gif'; // Kant
+    } else if (phrase === 'Nietzsche') {
+      recommendation = 'Tu aprendizaje está marcado por el coraje existencial. Eres creador de significados, no receptor.';
+      pixelUrl = 'https://i.imgur.com/k2dU7uB.gif'; // Nietzsche
+    } else if (phrase === 'Heidegger') {
+      recommendation = 'Tu aprendizaje es hermenéutico. Aprendes a habitar el mundo desde el lenguaje y la experiencia.';
+      pixelUrl = 'https://i.imgur.com/BcR1pKo.gif'; // Heidegger
+    } else {
+      recommendation = 'Tu estilo es integrador. Como Confucio o Sócrates, buscas equilibrio, sabiduría práctica y conocimiento interior.';
+      pixelUrl = 'https://i.imgur.com/YikCjR1.gif'; // Confucio
+    }
+
+    const resultado = document.getElementById('resultado');
+    resultado.textContent = 'Tu recomendación filosófica es: ' + recommendation;
+    resultado.style.display = 'block';
+
+    const pixel = document.getElementById('pixelArt');
+    pixel.style.backgroundImage = `url('${pixelUrl}')`; // Set the background image dynamically
+    pixel.style.display = 'block';
+  });
+</script>
+</body>
+</html>
